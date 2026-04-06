@@ -1,0 +1,128 @@
+{
+  "title": "Social Interactions",
+  "seq": 1002,
+  "assignTo": "dhruv",
+  "alwaysShowSentence" : false,
+  "words": [
+    {
+      "word": "gregarious",
+      "sentence": "The gregarious student introduced herself to everyone on the first day of school.",
+      "choices": ["sociable", "shy", "arrogant", "careless"],
+      "answer": "sociable"
+    },
+    {
+      "word": "introverted",
+      "sentence": "The introverted boy preferred reading alone rather than attending the crowded party.",
+      "choices": ["reserved", "outgoing", "talkative", "aggressive"],
+      "answer": "reserved"
+    },
+    {
+      "word": "cordial",
+      "sentence": "Despite their disagreement, the two rivals remained cordial at the school event.",
+      "choices": ["warmly polite", "openly hostile", "completely silent", "deeply suspicious"],
+      "answer": "warmly polite"
+    },
+    {
+      "word": "affable",
+      "sentence": "The affable new teacher quickly made every student feel welcome in class.",
+      "choices": ["easy to talk to", "difficult to approach", "strictly formal", "quietly distant"],
+      "answer": "easy to talk to"
+    },
+    {
+      "word": "aloof",
+      "sentence": "She seemed aloof at the party, standing in the corner and avoiding conversation.",
+      "choices": ["distant and detached", "warm and friendly", "loud and energetic", "nervous and anxious"],
+      "answer": "distant and detached"
+    },
+    {
+      "word": "congenial",
+      "sentence": "The congenial host made sure every guest felt comfortable at the gathering.",
+      "choices": ["pleasant and agreeable", "rude and dismissive", "quiet and reserved", "strict and demanding"],
+      "answer": "pleasant and agreeable"
+    },
+    {
+      "word": "rapport",
+      "sentence": "The counselor quickly built a strong rapport with her students by listening carefully.",
+      "choices": ["harmonious connection", "bitter rivalry", "formal contract", "public disagreement"],
+      "answer": "harmonious connection"
+    },
+    {
+      "word": "antagonistic",
+      "sentence": "His antagonistic comments during the debate made it hard to have a civil discussion.",
+      "choices": ["hostile", "supportive", "neutral", "cheerful"],
+      "answer": "hostile"
+    },
+    {
+      "word": "empathy",
+      "sentence": "She showed great empathy by comforting her friend after a difficult loss.",
+      "choices": ["understanding another's feelings", "ignoring others' emotions", "offering harsh advice", "expressing personal anger"],
+      "answer": "understanding another's feelings"
+    },
+    {
+      "word": "convivial",
+      "sentence": "The convivial atmosphere at the reunion made everyone laugh and share old memories.",
+      "choices": ["lively and friendly", "tense and awkward", "quiet and solemn", "cold and formal"],
+      "answer": "lively and friendly"
+    },
+    {
+      "word": "reticent",
+      "sentence": "The reticent student rarely volunteered answers, even when she knew them.",
+      "choices": ["reluctant to speak", "eager to share", "quick to argue", "openly emotional"],
+      "answer": "reluctant to speak"
+    },
+    {
+      "word": "condescending",
+      "sentence": "His condescending tone made his classmates feel like he thought he was better than them.",
+      "choices": ["acting superior to others", "showing deep respect", "being overly agreeable", "remaining completely silent"],
+      "answer": "acting superior to others"
+    },
+    {
+      "word": "amicable",
+      "sentence": "The two former rivals reached an amicable agreement to work together on the project.",
+      "choices": ["friendly", "hostile", "competitive", "indifferent"],
+      "answer": "friendly"
+    },
+    {
+      "word": "ostentatious",
+      "sentence": "His ostentatious bragging about his grades annoyed everyone at the lunch table.",
+      "choices": ["showy to impress others", "quietly confident", "genuinely humble", "softly spoken"],
+      "answer": "showy to impress others"
+    },
+    {
+      "word": "diffident",
+      "sentence": "The diffident newcomer hesitated to join the group, unsure if she would be welcome.",
+      "choices": ["lacking self-confidence", "boldly outgoing", "openly aggressive", "easily angered"],
+      "answer": "lacking self-confidence"
+    },
+    {
+      "word": "camaraderie",
+      "sentence": "Years of playing together had built a strong sense of camaraderie among the teammates.",
+      "choices": ["mutual trust and friendship", "fierce competition", "formal cooperation", "public recognition"],
+      "answer": "mutual trust and friendship"
+    },
+    {
+      "word": "tactful",
+      "sentence": "She was tactful enough to point out her friend's mistake without hurting his feelings.",
+      "choices": ["considerate in communication", "bluntly honest", "completely silent", "openly critical"],
+      "answer": "considerate in communication"
+    },
+    {
+      "word": "patronizing",
+      "sentence": "The older student's patronizing explanation made the younger kids feel looked down upon.",
+      "choices": ["treating others as inferior", "showing genuine respect", "offering sincere help", "remaining completely neutral"],
+      "answer": "treating others as inferior"
+    },
+    {
+      "word": "sociable",
+      "sentence": "The sociable twins knew practically every student in their grade by name.",
+      "choices": ["enjoying others' company", "preferring solitude", "feeling anxious in crowds", "being openly competitive"],
+      "answer": "enjoying others' company"
+    },
+    {
+      "word": "reconcile",
+      "sentence": "After weeks of not speaking, the two best friends finally decided to reconcile.",
+      "choices": ["restore a relationship", "end a friendship", "start an argument", "avoid a conflict"],
+      "answer": "restore a relationship"
+    }
+  ]
+}

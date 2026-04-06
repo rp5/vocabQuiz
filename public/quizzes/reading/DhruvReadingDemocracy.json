@@ -1,0 +1,79 @@
+{
+  "title": "Democracy and the Power of the Vote",
+  "type": "reading",
+  "seq": 3001,
+  "assignTo": "dhruv",
+  "passage": "Democracy, at its core, is built on a deceptively simple premise: that ordinary citizens possess the right and the capacity to shape the governments that rule them. Yet the history of democratic participation reveals a far more complicated story — one marked by expansion, suppression, and the ongoing struggle to define who truly belongs in the political community.\n\nThe ancient Athenians are often credited with pioneering democracy around the fifth century BCE. Their assembly, the ekklesia, allowed male citizens to debate and vote on legislation directly. However, this celebrated system excluded women, enslaved people, and foreign residents, who together made up the vast majority of Athens' population. The lesson of Athens endures: a democracy is only as inclusive as the people it allows to participate.\n\nModern democratic theory rests on the principle of popular sovereignty — the idea that governmental authority derives from the consent of the governed. In practice, this consent is expressed most visibly through elections. Voting is not merely a civic ritual; it is the mechanism by which citizens hold their leaders accountable, signal their policy preferences, and affirm their membership in the political community. Political scientists have long argued that low voter turnout poses a genuine threat to democratic legitimacy, since a government elected by a narrow slice of the population may not truly reflect the will of the whole.\n\nAnd yet, voter turnout across many democracies has been in decline. In the United States, presidential elections rarely see more than 60% of eligible voters cast a ballot, and midterm elections frequently dip below 50%. Researchers point to several causes: disillusionment with political institutions, the perceived complexity of registration processes, a belief among some citizens that their individual vote carries no meaningful weight, and in some cases, deliberate structural barriers such as voter ID laws, limited polling locations, and reduced early voting periods.\n\nProponents of stricter voting regulations argue that such measures are necessary to protect election integrity and prevent fraud. Critics, however, contend that documented cases of voter fraud are exceedingly rare, and that these restrictions disproportionately burden low-income voters, minorities, the elderly, and young voters — groups that already face higher obstacles to civic participation. The debate, at its heart, is a tension between two democratic values: security and access.\n\nSome democracies have taken radical steps to boost participation. Australia has required compulsory voting since 1924, resulting in turnout rates that consistently exceed 90%. Other nations have adopted automatic voter registration, extended early voting windows, and made Election Day a national holiday. Advocates of these reforms argue that a healthy democracy demands more than the absence of outright oppression — it requires actively removing the barriers that prevent citizens from exercising their rights.\n\nUltimately, the vitality of a democracy cannot be measured solely by the elegance of its written constitution or the formality of its institutions. It is measured in the lived experience of its citizens — in whether they feel that their voice carries weight, that their participation is welcomed, and that the system, however imperfect, is genuinely responsive to them. The vote, small as it may seem in isolation, remains the most direct thread connecting the individual to the society they share.",
+  "questions": [
+    {
+      "question": "The primary purpose of this passage is to:",
+      "choices": [
+        "Argue that compulsory voting should be adopted in all democracies",
+        "Examine the history, challenges, and ongoing tensions surrounding democratic participation",
+        "Prove that modern democracies have failed their citizens",
+        "Compare ancient Athenian democracy favorably to modern democratic systems"
+      ],
+      "answer": "Examine the history, challenges, and ongoing tensions surrounding democratic participation"
+    },
+    {
+      "question": "According to the passage, what was a significant limitation of Athenian democracy?",
+      "choices": [
+        "Citizens were not allowed to vote on legislation directly",
+        "It was dissolved by foreign invaders before it could develop",
+        "It excluded the majority of the population from participation",
+        "It relied on appointed rather than elected officials"
+      ],
+      "answer": "It excluded the majority of the population from participation"
+    },
+    {
+      "question": "As used in the fourth paragraph, the word 'disillusionment' most nearly means:",
+      "choices": [
+        "Confusion about how to register to vote",
+        "A loss of faith or confidence in something once trusted",
+        "Active opposition to democratic government",
+        "A legal barrier preventing civic participation"
+      ],
+      "answer": "A loss of faith or confidence in something once trusted"
+    },
+    {
+      "question": "Which of the following best describes the central tension the author identifies in the debate over voting regulations?",
+      "choices": [
+        "The conflict between local and federal government authority",
+        "The disagreement between older and younger generations of voters",
+        "The balance between protecting election security and ensuring equal access",
+        "The divide between countries that require voting and those that do not"
+      ],
+      "answer": "The balance between protecting election security and ensuring equal access"
+    },
+    {
+      "question": "The author mentions Australia's compulsory voting system primarily to:",
+      "choices": [
+        "Suggest that the United States should immediately adopt the same policy",
+        "Criticize countries that do not require their citizens to vote",
+        "Provide an example of a structural reform that has significantly increased voter participation",
+        "Argue that high turnout rates guarantee a fair and just democracy"
+      ],
+      "answer": "Provide an example of a structural reform that has significantly increased voter participation"
+    },
+    {
+      "question": "Which claim from the passage is best supported by evidence provided within the passage itself?",
+      "choices": [
+        "Voter fraud is the leading cause of low voter turnout in the United States",
+        "Ancient Athens had a more functional democracy than any modern nation",
+        "U.S. voter turnout in presidential elections rarely surpasses 60% of eligible voters",
+        "Compulsory voting undermines individual freedom in democratic societies"
+      ],
+      "answer": "U.S. voter turnout in presidential elections rarely surpasses 60% of eligible voters"
+    },
+    {
+      "question": "In the final paragraph, the author suggests that the true measure of a democracy's health is:",
+      "choices": [
+        "The number of political parties competing in elections",
+        "The strength and detail of its written constitution",
+        "Whether citizens genuinely feel heard and that their participation matters",
+        "The percentage of laws passed by a majority vote in the legislature"
+      ],
+      "answer": "Whether citizens genuinely feel heard and that their participation matters"
+    }
+  ]
+}
