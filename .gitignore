@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+*.tsbuildinfo
+
+# Data files (persistent state — never commit)
+data.json
+data.test.json
+seq_counter
+
+# Server temp files
+.server.pid
+.server.log
+
+# Test artifacts
+test-results/
+playwright-report/
+
+# Packaged tarballs
+*.tar.gz
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
