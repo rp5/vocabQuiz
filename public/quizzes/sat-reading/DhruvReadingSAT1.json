@@ -1,0 +1,229 @@
+{
+  "title": "Various topics, set 1",
+  "type": "satReading",
+  "seq": 20,
+  "timed": true,
+  "assignTo": ["dhruv", "test"],
+  "satQuestions": [
+    {
+      "passage": "In Louisa May Alcott’s 1868 novel, *Little Women*, Jo was the first to wake in the gray dawn of Christmas morning. No stockings hung at the fireplace, and for a moment she felt as much disappointed as she had long ago, when her little sock fell down because it was so full of candies.",
+      "question": "Which choice best summarizes the passage?",
+      "choices": [
+        "Jo is excited to find her stocking full of candy.",
+        "Jo wakes up and initially feels a sense of letdown.",
+        "Jo is preparing a Christmas surprise for her sisters.",
+        "Jo is reminiscing about a childhood Christmas in the woods."
+      ],
+      "answer": "Jo wakes up and initially feels a sense of letdown."
+    },
+    {
+      "passage": "In the early 20th century, the 'Great Migration' saw millions of African Americans move from the rural Southern United States to the urban North. While the move was driven by a desire to escape Jim Crow laws, it also fundamentally reshaped the cultural landscape of cities like Chicago and New York, fueling the Harlem Renaissance.",
+      "question": "According to the passage, what was one significant result of the Great Migration?",
+      "choices": [
+        "The decline of urban populations in the North.",
+        "A return to agrarian economic systems.",
+        "The cultural transformation of Northern cities.",
+        "The immediate end of Jim Crow laws in the South."
+      ],
+      "answer": "The cultural transformation of Northern cities."
+    },
+    {
+      "passage": "Researchers studying the Hawaiian crow (*Corvus hawaiiensis*) have observed the birds using sticks to extract larvae from logs. While tool use is rare in the animal kingdom, this behavior suggests that the Hawaiian crow possesses a level of cognitive complexity comparable to that of certain primates.",
+      "question": "What is the main idea of the passage?",
+      "choices": [
+        "Hawaiian crows are the only birds that use tools.",
+        "The use of tools by Hawaiian crows indicates advanced intelligence.",
+        "Hawaiian crows prefer larvae over other food sources.",
+        "Primates taught Hawaiian crows how to use sticks as tools."
+      ],
+      "answer": "The use of tools by Hawaiian crows indicates advanced intelligence."
+    },
+    {
+      "passage": "The 'Lindy Hop' is an American dance that evolved in Harlem, New York, in the 1920s and 1930s. It was a cultural phenomenon that broke social barriers, as the Savoy Ballroom—where the dance flourished—was one of the few integrated public spaces where Black and white dancers could interact freely.",
+      "question": "Based on the text, what was unique about the Savoy Ballroom?",
+      "choices": [
+        "It was the only place where the Lindy Hop was performed.",
+        "It served as a rare venue for interracial social interaction.",
+        "It was the first ballroom to be built in Harlem.",
+        "It prohibited the use of modern jazz music."
+      ],
+      "answer": "It served as a rare venue for interracial social interaction."
+    },
+    {
+      "passage": "The following text is adapted from Emily Dickinson's poem 'The Soul selects her own Society.' \n\nThe Soul selects her own Society — / Then — shuts the Door — / To her divine Majority — / Present no more —",
+      "question": "Which choice best describes the 'Soul' as portrayed in the poem?",
+      "choices": [
+        "Social and eager to meet new people.",
+        "Selective and inclined toward privacy.",
+        "Fearful of the outside world.",
+        "Seeking approval from the majority."
+      ],
+      "answer": "Selective and inclined toward privacy."
+    },
+    {
+      "passage": "Biologists have noted that certain desert plants exhibit **phenological plasticity**, meaning they can alter the timing of their life cycle events in response to unpredictable rainfall. In years with early rains, these plants germinate and flower quickly to take advantage of the moisture before it evaporates.",
+      "question": "What does the term 'phenological plasticity' refer to in the context of the passage?",
+      "choices": [
+        "The ability of plants to grow in complete darkness.",
+        "The tendency of plants to remain dormant for several years.",
+        "The capacity to adjust life cycles based on environmental changes.",
+        "The physical hardening of plant leaves to prevent water loss."
+      ],
+      "answer": "The capacity to adjust life cycles based on environmental changes."
+    },
+    {
+      "passage": "The concept of 'nudge theory' in economics suggests that small, indirect suggestions can influence the behavior and decision-making of groups or individuals. For example, placing healthy snacks at eye level in a cafeteria is a 'nudge' that encourages better eating habits without forbidding junk food.",
+      "question": "According to the passage, how does nudge theory influence behavior?",
+      "choices": [
+        "By strictly enforcing new laws and regulations.",
+        "By providing subtle cues that guide choices.",
+        "By offering financial rewards for good decisions.",
+        "By removing all unhealthy options from the environment."
+      ],
+      "answer": "By providing subtle cues that guide choices."
+    },
+    {
+      "passage": "The Impressionist movement of the late 19th century was characterized by a focus on the effects of light and color rather than precise detail. Artists like Claude Monet sought to capture the 'impression' of a moment, often painting the same subject at different times of day to observe how the atmosphere shifted.",
+      "question": "What was a primary goal of Impressionist artists like Monet?",
+      "choices": [
+        "To create highly realistic and detailed portraits.",
+        "To document historical events with photographic accuracy.",
+        "To portray the changing qualities of light and atmosphere.",
+        "To emphasize the use of dark, somber colors in landscapes."
+      ],
+      "answer": "To portray the changing qualities of light and atmosphere."
+    },
+    {
+      "passage": "In 1915, Albert Einstein published his theory of general relativity, which proposed that gravity is not a force acting at a distance but rather a curvature of spacetime caused by mass and energy. This theory successfully predicted the bending of starlight by the sun's gravity.",
+      "question": "Which choice best describes Einstein’s view of gravity as presented in the text?",
+      "choices": [
+        "An invisible force that pulls objects together.",
+        "A result of the physical shape of spacetime.",
+        "A phenomenon that only affects light, not matter.",
+        "A theory that was disproven by observations of the sun."
+      ],
+      "answer": "A result of the physical shape of spacetime."
+    },
+    {
+      "passage": "The studio was filled with the rich odor of roses, and when the light summer wind stirred amidst the trees of the garden, there came through the open door the heavy scent of the lilac, or the more delicate perfume of the pink-flowering thorn.",
+      "question": "Which choice best describes the function of the passage?",
+      "choices": [
+        "It introduces a conflict between two main characters.",
+        "It establishes a sensory-rich and tranquil setting.",
+        "It foreshadows a dark turn in the novel's plot.",
+        "It provides a scientific description of garden plants."
+      ],
+      "answer": "It establishes a sensory-rich and tranquil setting."
+    },
+    {
+      "passage": "A study on urban heat islands found that cities with high concentrations of concrete and asphalt experience significantly higher temperatures than surrounding rural areas. However, increasing the **green canopy** by planting trees and installing rooftop gardens was found to reduce surface temperatures by up to 10 degrees.",
+      "question": "What is the relationship between the 'green canopy' and urban heat islands?",
+      "choices": [
+        "The green canopy contributes to higher temperatures.",
+        "The green canopy helps mitigate the heat island effect.",
+        "The green canopy has no measurable effect on temperature.",
+        "The green canopy is destroyed by the heat island effect."
+      ],
+      "answer": "The green canopy helps mitigate the heat island effect."
+    },
+    {
+      "passage": "The Great Wall of China was not built all at once but was a series of fortifications constructed over many centuries. While often associated with defense against nomadic groups, the wall also served as a means of border control, allowing for the regulation of trade and the collection of duties along the Silk Road.",
+      "question": "According to the passage, what was a secondary function of the Great Wall?",
+      "choices": [
+        "To provide a path for nomadic migrations.",
+        "To facilitate the taxation and regulation of trade.",
+        "To serve as a monument to a single emperor.",
+        "To act as the primary route for the Silk Road."
+      ],
+      "answer": "To facilitate the taxation and regulation of trade."
+    },
+    {
+      "passage": "Jazz music is often described as a 'uniquely American art form' because it synthesized African rhythmic traditions with European harmonic structures. This blending of cultures in New Orleans during the early 20th century created a genre that emphasized improvisation and individual expression.",
+      "question": "Why is jazz considered a 'uniquely American' art form in the text?",
+      "choices": [
+        "Because it was the first type of music ever recorded.",
+        "Because it prohibited the use of European instruments.",
+        "Because it combined diverse cultural musical traditions.",
+        "Because it was created by the United States government."
+      ],
+      "answer": "Because it combined diverse cultural musical traditions."
+    },
+    {
+      "passage": "The **Red Queen Hypothesis** in evolutionary biology suggests that species must constantly adapt and evolve not merely to gain a reproductive advantage, but simply to survive while pitted against ever-evolving opposing species in a changing environment.",
+      "question": "Which statement best summarizes the Red Queen Hypothesis?",
+      "choices": [
+        "Species only evolve when they are in a stable environment.",
+        "Evolution is a race where species must change to stay in place.",
+        "The fastest species are always the ones that survive.",
+        "Reproduction is more important than adaptation for survival."
+      ],
+      "answer": "Evolution is a race where species must change to stay in place."
+    },
+    {
+      "passage": "In his 1776 work *The Wealth of Nations*, Adam Smith argued that the 'invisible hand' of the market guides individuals to promote the public interest, even when they are only pursuing their own self-interest through trade and competition.",
+      "question": "What is the main idea of Smith's 'invisible hand' concept?",
+      "choices": [
+        "Government intervention is necessary for a fair market.",
+        "Self-interested actions can lead to positive social outcomes.",
+        "The market is controlled by a small group of individuals.",
+        "Competition should be eliminated to protect the public."
+      ],
+      "answer": "Self-interested actions can lead to positive social outcomes."
+    },
+    {
+      "passage": "The ancient Greek philosopher Socrates is famous for his method of **elenchus**, or cross-examination. Rather than lecturing his students, Socrates would ask a series of questions designed to help them realize the contradictions in their own beliefs.",
+      "question": "Which choice best describes the Socratic method?",
+      "choices": [
+        "Providing direct answers to complex ethical questions.",
+        "Using questions to expose flaws in a person's logic.",
+        "Lecturing students on the history of Greek philosophy.",
+        "Encouraging students to memorize established truths."
+      ],
+      "answer": "Using questions to expose flaws in a person's logic."
+    },
+    {
+      "passage": "A recent archaeological find in Peru uncovered a complex system of **quipus**—knotted strings used by the Inca Empire. While once thought to be simple mnemonic devices, researchers now believe they were a sophisticated form of record-keeping for census data and tax accounts.",
+      "question": "How has the understanding of 'quipus' changed according to the text?",
+      "choices": [
+        "They are now seen as more complex than previously thought.",
+        "They are now believed to be purely decorative items.",
+        "They have been proven to be less accurate than written records.",
+        "They are no longer considered part of Inca culture."
+      ],
+      "answer": "They are now seen as more complex than previously thought."
+    },
+    {
+      "passage": "In Henry David Thoreau’s 1854 book *Walden*, he writes: 'I went to the woods because I wished to live deliberately, to front only the essential facts of life, and see if I could not learn what it had to teach, and not, when I came to die, discover that I had not lived.'",
+      "question": "What was Thoreau’s primary motivation for moving to the woods?",
+      "choices": [
+        "To escape the noise of the city and find a job.",
+        "To live a focused and purposeful life close to nature.",
+        "To prove that he could survive without any modern tools.",
+        "To write a biography about the people living in Walden."
+      ],
+      "answer": "To live a focused and purposeful life close to nature."
+    },
+    {
+      "passage": "Symbiosis is a biological interaction where two different species live in close physical association. In **mutualism**, both species benefit, such as when bees collect nectar from flowers and, in the process, help the flowers reproduce by spreading pollen.",
+      "question": "Which choice provides an example of mutualism as described in the text?",
+      "choices": [
+        "A bird building a nest in a tree without harming it.",
+        "A parasite living inside a host and taking its nutrients.",
+        "A bee and a flower both gaining something from their interaction.",
+        "A predator hunting its prey in the wild."
+      ],
+      "answer": "A bee and a flower both gaining something from their interaction."
+    },
+    {
+      "passage": "The Apollo 11 moon landing in 1969 was a landmark event. However, the mission's success depended heavily on the 'hidden figures'—the mathematicians and engineers whose complex calculations ensured the spacecraft's safe trajectory and return.",
+      "question": "What point does the author make about the success of the Apollo 11 mission?",
+      "choices": [
+        "It was primarily due to the bravery of the astronauts.",
+        "It was a result of luck rather than careful planning.",
+        "It relied on the critical work of many behind-the-scenes experts.",
+        "It was the only mission that successfully reached the moon."
+      ],
+      "answer": "It relied on the critical work of many behind-the-scenes experts."
+    }
+  ]
+}
