@@ -10,6 +10,7 @@ export default defineConfig({
     __APP_VERSION__: JSON.stringify(pkg.version),
   },
   server: {
+    allowedHosts: true,
     proxy: {
       '/api': 'http://localhost:3001',
     },
