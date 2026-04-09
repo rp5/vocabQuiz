@@ -62,7 +62,7 @@ a:hover {
 
 /* Common utility classes */
 .container {
-  max-width: 960px;
+  max-width: 1120px;
   margin: 0 auto;
   padding: 0 24px;
 }
@@ -454,7 +454,7 @@ th {
 .sat-passage-content {
   font-size: 1.0625rem;
   line-height: 1.8;
-  max-width: 560px;
+  max-width: 640px;
 }
 
 .sat-split-right {

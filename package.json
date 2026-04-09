@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "concurrently \"vite\" \"node server.cjs\"",
     "dev:host": "concurrently \"vite --host\" \"node server.cjs\"",
-    "dev:test": "DATA_FILE=data.test.json concurrently \"vite\" \"node server.cjs\"",
+    "dev:test": "DATA_DIR=./test-data concurrently \"vite\" \"node server.cjs\"",
     "build": "tsc -b && vite build",
     "start": "NODE_ENV=production node server.cjs",
     "preview": "vite preview"

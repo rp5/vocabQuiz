@@ -28,21 +28,22 @@ export default function SATQuizTakePage({ quiz }: { quiz: Quiz }) {
   const [showReview, setShowReview] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  // Timer state — uses wall-clock time via Date.now() to avoid drift
+  // Timer state — always-on, uses wall-clock time via Date.now() to avoid drift
   const [elapsed, setElapsed] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [timerHidden, setTimerHidden] = useState(false);
   const timerStartRef = useRef(Date.now());
   const pausedDurationRef = useRef(0);
   const pauseStartRef = useRef(0);
 
-  // Timer tick — uses Date.now() deltas for accuracy
+  // Timer tick — always runs (not gated on isTimed)
   useEffect(() => {
-    if (!isTimed || paused || submitted) return;
+    if (paused || submitted) return;
     const id = setInterval(() => {
       setElapsed(Math.floor((Date.now() - timerStartRef.current - pausedDurationRef.current) / 1000));
     }, 250);
     return () => clearInterval(id);
-  }, [isTimed, paused, submitted]);
+  }, [paused, submitted]);
 
   const togglePause = useCallback(() => {
     setPaused(prev => {
@@ -104,9 +105,26 @@ export default function SATQuizTakePage({ quiz }: { quiz: Quiz }) {
   };
 
   // --- Timer display (fixed position in app header area, top-right) ---
-  const timerDisplay = isTimed ? (
+  const timerDisplay = timerHidden ? (
+    <div className="sat-timer-fixed">
+      <button
+        type="button"
+        className="sat-timer-btn"
+        onClick={() => setTimerHidden(false)}
+      >
+        Show Timer
+      </button>
+    </div>
+  ) : (
     <div className="sat-timer-fixed">
       <span className="sat-timer-time" data-testid="sat-timer">{formatTime(elapsed)}</span>
+      <button
+        type="button"
+        className="sat-timer-btn"
+        onClick={() => setTimerHidden(true)}
+      >
+        Hide
+      </button>
       <button
         type="button"
         className={`sat-timer-btn ${paused ? 'sat-timer-btn--paused' : ''}`}
@@ -115,7 +133,7 @@ export default function SATQuizTakePage({ quiz }: { quiz: Quiz }) {
         {paused ? 'Resume' : 'Pause'}
       </button>
     </div>
-  ) : null;
+  );
 
   // --- Pause overlay ---
   if (paused && !showReview) {
@@ -172,11 +190,9 @@ export default function SATQuizTakePage({ quiz }: { quiz: Quiz }) {
           <div style={{ color: 'var(--color-text-light)', marginBottom: '0.5rem' }}>
             {answeredCount} of {questions.length} answered
           </div>
-          {isTimed && (
-            <div style={{ color: 'var(--color-text-light)', marginBottom: '1.5rem', fontSize: '0.9375rem' }}>
-              Time: {formatTime(elapsed)}
-            </div>
-          )}
+          <div style={{ color: 'var(--color-text-light)', marginBottom: '1.5rem', fontSize: '0.9375rem' }}>
+            Time: {formatTime(elapsed)}
+          </div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'center', marginBottom: '2rem' }}>
             {questions.map((q, i) => {
               const isAnswered = !!answers[q.id];

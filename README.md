@@ -15,14 +15,22 @@ npm install
 
 ## Running the App
 
+`DATA_DIR` is required — all persistent state (data.json, quizzes, seq_counter) lives in this directory.
+
 ```bash
+# First time: initialize a data directory
+./adminTools.sh init-data ~/rigor-data
+export DATA_DIR=~/rigor-data
+
+# Start the server
 ./adminTools.sh start         # Start dev server
 ./adminTools.sh start --prod  # Build and start production server
 ```
 
-Or directly with npm:
+Or directly with npm (DATA_DIR must be set):
 
 ```bash
+export DATA_DIR=~/rigor-data
 npm run dev                   # Dev: Vite (5173) + Express API (3001)
 npm run dev -- --host         # Dev with network access
 npm run build && npm start    # Production on port 3000
@@ -33,15 +41,17 @@ npm run build && npm start    # Production on port 3000
 
 ### How It Works
 
-All devices share the same data through the Express API server. When a kid takes a quiz on their iPad, the result appears on your admin dashboard within 10 seconds. Data is stored in a single `data.json` file on disk, making backups simple.
+All devices share the same data through the Express API server. When a kid takes a quiz on their iPad, the result appears on your admin dashboard within 10 seconds. Data is stored in `$DATA_DIR/data.json` on disk, making backups simple.
 
 ### First-Time Setup
 
-1. Open `http://localhost:5173/` (admin login)
-2. Set a password (protects the admin area)
-3. Add kid profiles (name, password, grade)
-4. Create quizzes and assign them to kids
-5. Give kids the URL: `http://<your-ip>:5173/quiz/login`
+1. Run `./adminTools.sh init-data ~/rigor-data` and `export DATA_DIR=~/rigor-data`
+2. Start the server: `./adminTools.sh start`
+3. Open `http://localhost:5173/` (admin login)
+4. Set a password (protects the admin area)
+5. Add kid profiles (name, password, grade)
+6. Create quizzes and assign them to kids
+7. Give kids the URL: `http://<your-ip>:5173/quiz/login`
 
 ## Adding Quizzes
 
@@ -51,13 +61,13 @@ All devices share the same data through the Express API server. When a kid takes
 ./adminTools.sh publish myquiz.json Shrey
 ```
 
-This copies the quiz file to the correct subdirectory (`vocab/`, `reading/`, or `sat-reading/`) under the quizzes directory (either `$DATA_DIR/quizzes/` in production or `public/quizzes/` in dev), auto-assigns the next sequence number (starting at 5000), sets `assignTo` to the given student name, and hot-reloads the server if it's running.
+This copies the quiz file to the correct subdirectory (`vocab/`, `reading/`, or `sat-reading/`) under `$DATA_DIR/quizzes/`, auto-assigns the next sequence number (starting at 5000), sets `assignTo` to the given student name, and hot-reloads the server if it's running.
 
 The quiz type is auto-detected from the JSON content (`words` = vocab, `passage`/`questions` = reading, `satQuestions` = satReading).
 
 ### Method 2: Drop files in the quizzes folder manually
 
-Create a JSON file in one of the three formats below, save it in the appropriate subdirectory under the quizzes folder, and restart the server. The server auto-discovers all `.json` files in the subdirectories — no index file needed.
+Create a JSON file in one of the three formats below, save it in the appropriate subdirectory under `$DATA_DIR/quizzes/`, and restart the server. The server auto-discovers all `.json` files in the subdirectories — no index file needed.
 
 ```
 quizzes/
@@ -148,7 +158,7 @@ quizzes/
 - `questions[].answer` — the correct choice (must match one of the choices exactly)
 
 **SAT Reading fields:**
-- `timed` — (optional, default `false`) if `true`, shows an elapsed-time stopwatch with pause/resume
+- `timed` — (optional, default `false`) if `true`, elapsed time is recorded in results. Timer UI is always visible on SAT and reading quizzes regardless of this setting.
 - `satQuestions[]` — array of question objects, each with its own passage
 - `satQuestions[].passage` — short passage for this question (25-150 words). Supports `**bold**`, `*italic*`, and paragraph breaks.
 - `satQuestions[].question` — the question about the passage
@@ -157,7 +167,7 @@ quizzes/
 
 **Validating your JSON before dropping:**
 ```bash
-python3 -m json.tool public/quizzes/vocab/week12.json > /dev/null
+python3 -m json.tool $DATA_DIR/quizzes/vocab/week12.json > /dev/null
 ```
 Prints an error with the line number if invalid, or silently succeeds if valid. Note: the app handles minor issues like newlines inside strings, but validating is a good habit.
 
@@ -176,9 +186,9 @@ Kids see **one quiz at a time** (the next untaken quiz, ordered by `seq`):
 1. Kid logs in with name + password at `/quiz/login`
 2. Sees the next untaken quiz with a "Start Quiz" button
 3. Takes the quiz:
-   - **Vocab:** word + context sentence + 4 shuffled choices per question
-   - **Reading:** split-screen (passage pinned on left, all questions scrollable on right with lettered bubble choices)
-   - **SAT Reading:** Bluebook-style split-screen (passage left, question + lettered choices right), one question at a time, numbered navigation bar + prev/next arrows, review screen before submit
+   - **Vocab:** word + context sentence + 4 shuffled A/B/C/D bubble choices
+   - **Reading:** split-screen (passage pinned on left, all questions scrollable on right with A/B/C/D bubble choices), always-on timer with hide/pause
+   - **SAT Reading:** Bluebook-style split-screen (passage left, question + A/B/C/D bubble choices right), one question at a time, numbered navigation bar + prev/next arrows, review screen before submit, always-on timer with hide/pause
 4. Submits and sees score + per-question review immediately
 5. Quiz moves to a collapsible "Previously Taken" section
 6. Next untaken quiz appears, or "All caught up!" message
@@ -189,23 +199,25 @@ Kids see **one quiz at a time** (the next untaken quiz, ordered by `seq`):
 `adminTools.sh` provides command-line server management and quiz publishing.
 
 ```bash
+./adminTools.sh init-data <directory>           # Initialize data directory (no DATA_DIR needed)
 ./adminTools.sh start [--prod]                  # Start server (dev or production)
 ./adminTools.sh stop                            # Stop server
-./adminTools.sh restart [--prod]                # Restart server
+./adminTools.sh restart [--prod]                # Restart server (auto-detects prod mode)
 ./adminTools.sh status                          # Show if server is running
 ./adminTools.sh reset-password                  # Clear admin password (re-setup on next login)
 ./adminTools.sh publish <file.json> <student>   # Publish quiz for a student
-./adminTools.sh init-data <directory>           # Initialize external data directory
-./adminTools.sh upgrade <tarball.tar.gz>       # Upgrade code from tarball (requires DATA_DIR)
+./adminTools.sh upgrade <tarball.tar.gz>        # Upgrade code from tarball
 ```
 
-**Server management** uses a PID file (`.server.pid`). The `stop` command kills the entire process group, handling dev mode's child processes (Vite + Express).
+All commands except `init-data`, `package`, and `help` require `DATA_DIR` to be set.
+
+**Server management** uses a PID file (`.server.pid`) and a mode file (`.server.mode`). The `stop` command kills the entire process group, handling dev mode's child processes (Vite + Express). The `restart` command auto-detects whether the server was running in production mode and preserves it.
 
 **Reset password** clears the admin password hash in `data.json`, so the next login shows the "Set Password" form. Warns if the server is running (changes would be overwritten).
 
-**Publish** auto-assigns the next sequence number from `seq_counter` (starts at 5000), sets `assignTo`, auto-detects quiz type, copies to the correct subdirectory (`vocab/`, `reading/`, or `sat-reading/`), and hot-reloads the running server via the `/api/reload-quizzes` endpoint.
+**Publish** auto-assigns the next sequence number from `seq_counter` (starts at 5000), sets `assignTo`, auto-detects quiz type, copies to the correct subdirectory under `$DATA_DIR/quizzes/` (`vocab/`, `reading/`, or `sat-reading/`), and hot-reloads the running server via the `/api/reload-quizzes` endpoint.
 
-**Init data** creates an external data directory for production use (see [Production Deployment](#production-deployment) below).
+**Init data** creates the data directory structure (required before first use).
 
 ## Architecture
 
@@ -218,11 +230,11 @@ Browser (React SPA)  <-->  Express API (server.cjs)  <-->  $DATA_DIR/data.json
 - **Quiz auto-loading** — server scans `quizzes/vocab/`, `quizzes/reading/`, `quizzes/sat-reading/` for `.json` files on startup (no index file needed)
 - **Client polling** every 10s keeps admin dashboard updated with kid results
 - **Optimistic updates** — UI responds instantly, syncs to server in background
-- **DATA_DIR** separates persistent state from code — safe to redeploy without data loss
+- **DATA_DIR** (required) — all persistent state lives in this directory, separate from code
 
 ## data.json
 
-All app data is stored in a single `data.json` file (in `$DATA_DIR` for production, or project root for dev). It contains:
+All app data is stored in `$DATA_DIR/data.json`. It contains:
 
 - `providerPasswordHash` — admin password (hashed)
 - `kids` — array of kid profiles (name, password, grade)
@@ -271,7 +283,7 @@ npx playwright install chromium
 
 ## Production Deployment
 
-Production uses the `DATA_DIR` environment variable to store all persistent state (data, quizzes, results) outside the code directory. This makes it safe to update the code without affecting production data.
+`DATA_DIR` is required for all modes (dev and production). It stores all persistent state (data, quizzes, results) outside the code directory, making it safe to update the code without affecting data.
 
 ```
 ~/rigor-data/              ← persistent, survives deploys

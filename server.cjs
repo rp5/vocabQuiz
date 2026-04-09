@@ -5,13 +5,21 @@ const path = require('path');
 const app = express();
 app.use(express.json({ limit: '10mb' }));
 
-const DATA_DIR = process.env.DATA_DIR || '';
-const DATA_FILE = DATA_DIR
-  ? path.join(DATA_DIR, 'data.json')
-  : path.join(__dirname, process.env.DATA_FILE || 'data.json');
-const QUIZZES_DIR = DATA_DIR
-  ? path.join(DATA_DIR, 'quizzes')
-  : path.join(__dirname, 'public', 'quizzes');
+const DATA_DIR = process.env.DATA_DIR;
+if (!DATA_DIR) {
+  console.error('[Server] ERROR: DATA_DIR environment variable is required.');
+  console.error('[Server] Set up a data directory first:');
+  console.error('[Server]   ./adminTools.sh init-data ~/rigor-data');
+  console.error('[Server]   export DATA_DIR=~/rigor-data');
+  process.exit(1);
+}
+if (!fs.existsSync(DATA_DIR) || !fs.statSync(DATA_DIR).isDirectory()) {
+  console.error(`[Server] ERROR: DATA_DIR does not exist or is not a directory: ${DATA_DIR}`);
+  console.error('[Server] Create it with: ./adminTools.sh init-data ' + DATA_DIR);
+  process.exit(1);
+}
+const DATA_FILE = path.join(DATA_DIR, 'data.json');
+const QUIZZES_DIR = path.join(DATA_DIR, 'quizzes');
 const PORT = process.env.PORT || (process.env.NODE_ENV === 'production' ? 3000 : 3001);
 
 const DEFAULT_DATA = {
@@ -368,9 +376,7 @@ if (process.env.NODE_ENV === 'production') {
 loadQuizzesFromFolder();
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`[Server] Rigor API running on port ${PORT}`);
-  if (DATA_DIR) {
-    console.log(`[Server] DATA_DIR: ${DATA_DIR}`);
-  }
+  console.log(`[Server] DATA_DIR: ${DATA_DIR}`);
   console.log(`[Server] Data file: ${DATA_FILE}`);
   console.log(`[Server] Quizzes dir: ${QUIZZES_DIR}`);
   if (process.env.NODE_ENV !== 'production') {
