@@ -42,6 +42,12 @@ export async function loadAppData(): Promise<AppData> {
   }
 }
 
+function fetchWithTimeout(input: RequestInfo | URL, init?: RequestInit, ms = 15_000): Promise<Response> {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), ms);
+  return fetch(input, { ...init, signal: controller.signal }).finally(() => clearTimeout(id));
+}
+
 async function trackSave<T>(fn: () => Promise<T>): Promise<T> {
   pendingSaves++;
   try {
@@ -53,7 +59,7 @@ async function trackSave<T>(fn: () => Promise<T>): Promise<T> {
 
 export async function apiPost(endpoint: string, body: unknown): Promise<unknown> {
   return trackSave(async () => {
-    const res = await fetch(`${API_BASE}${endpoint}`, {
+    const res = await fetchWithTimeout(`${API_BASE}${endpoint}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
@@ -65,7 +71,7 @@ export async function apiPost(endpoint: string, body: unknown): Promise<unknown>
 
 export async function apiPatch(endpoint: string, body: unknown): Promise<unknown> {
   return trackSave(async () => {
-    const res = await fetch(`${API_BASE}${endpoint}`, {
+    const res = await fetchWithTimeout(`${API_BASE}${endpoint}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
@@ -77,7 +83,7 @@ export async function apiPatch(endpoint: string, body: unknown): Promise<unknown
 
 export async function apiDelete(endpoint: string): Promise<void> {
   return trackSave(async () => {
-    const res = await fetch(`${API_BASE}${endpoint}`, { method: 'DELETE' });
+    const res = await fetchWithTimeout(`${API_BASE}${endpoint}`, { method: 'DELETE' });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
   });
 }
