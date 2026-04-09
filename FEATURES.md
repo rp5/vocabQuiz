@@ -59,6 +59,7 @@ Rigor is a quiz web app for kids supporting three quiz types: **vocabulary**, **
 ### Vocab Quizzes
 - **Sequential flow** — kid sees only the next untaken quiz (lowest `seq` not yet completed)
 - **Scrollable page** — all questions on one page, variable count
+- **A/B/C/D bubble choices** — lettered bubble buttons matching the reading/SAT style for consistent look and feel
 - **Shuffled choices** — answer order randomized on each quiz load
 - **Bold word in sentence** — the vocabulary word is highlighted in the context sentence
 - **Optional sentence hints** — when `alwaysShowSentence: false`, sentence is hidden behind a "Show word in a sentence" button per question; hint usage is recorded per word
@@ -71,6 +72,7 @@ Rigor is a quiz web app for kids supporting three quiz types: **vocabulary**, **
 - **Lettered bubble choices** — A/B/C/D choice format matching SAT style
 - **Passage rendering** — supports `**bold**`, `*italic*`, and paragraph breaks
 - **Shuffled choices** — answer order randomized on each quiz load
+- **Always-on timer** — elapsed-time timer visible in the top-right with hide/pause controls; timer can be hidden and re-shown; pausing blurs quiz content
 - **Progress tracking** — submit button shows "X/Y answered", disabled until all answered
 - **Results at end** — score and per-question review shown immediately after submission
 
@@ -83,7 +85,7 @@ Rigor is a quiz web app for kids supporting three quiz types: **vocabulary**, **
 - **Submit from review** — "Submit Test" button on review screen; shows count of answered questions
 - **Passage formatting** — supports `**bold**`, `*italic*`, and paragraph breaks
 - **Shuffled choices** — answer order randomized on each quiz load
-- **Optional timer** — when `timed: true`, shows elapsed-time stopwatch (MM:SS) in the top-right with pause/resume; pausing blurs the quiz content; elapsed time recorded in results
+- **Always-on timer** — elapsed-time stopwatch (MM:SS) always visible in the top-right with hide/pause controls; timer can be hidden and re-shown; pausing blurs the quiz content; when `timed: true`, elapsed time is recorded in results
 
 ## Kid Dashboard
 
@@ -123,18 +125,18 @@ Command-line script for server management and quiz publishing:
 
 - **`start [--prod]`** — start server in dev (default) or production mode; PID tracked in `.server.pid`
 - **`stop`** — stop server; kills entire process group (handles dev mode's Vite + Express children)
-- **`restart [--prod]`** — stop then start
+- **`restart [--prod]`** — stop then start; auto-detects production mode if no flag given
 - **`status`** — show whether server is running with PID; shows DATA_DIR location
 - **`reset-password`** — clear admin password hash in `data.json`; next login shows "Set Password" form; warns if server is running
 - **`publish <file.json> <student>`** — publish a quiz: auto-detects type, auto-assigns seq from `seq_counter` (starts at 5000), sets `assignTo`, copies to correct subdir (`vocab/`, `reading/`, or `sat-reading/`), hot-reloads running server
 - **`init-data <directory>`** — initialize an external data directory for production; copies existing quizzes, data.json, and seq_counter; prints setup instructions
 - **`upgrade <tarball.tar.gz>`** — stop server, extract new code from tarball (skipping data files), install deps, build, and restart; requires `DATA_DIR` to protect production state
 
-All commands respect the `DATA_DIR` environment variable. When set, persistent state (data.json, quizzes, seq_counter) is read from/written to that directory instead of the project directory.
+`DATA_DIR` environment variable is required for all commands except `init-data`, `package`, and `help`. All persistent state (data.json, quizzes, seq_counter) is read from/written to `DATA_DIR`.
 
 ## Data Management
 
-- **External data directory** — set `DATA_DIR` env var to store all persistent state outside the code directory, making deploys safe
+- **Required data directory** — `DATA_DIR` env var must be set; all persistent state lives outside the code directory, making deploys safe
 - **Export** — download all data (kids, quizzes, results) as JSON
 - **Import** — upload JSON to restore or merge data
 - **Server-side storage** — all data in `data.json`, shared across all devices
@@ -259,23 +261,23 @@ Browser (React SPA)  <-->  Express API (server.cjs)  <-->  $DATA_DIR/data.json
 - **Dev mode:** Vite (port 5173) + Express (port 3001) via `concurrently`, Vite proxies `/api/*`
 - **Production:** Express serves built frontend + API on port 3000
 - **Quiz auto-loading:** Server scans `quizzes/vocab/`, `quizzes/reading/`, `quizzes/sat-reading/` for `.json` files on startup
-- **DATA_DIR:** Separates persistent state from code for safe deploys
+- **DATA_DIR (required):** All persistent state lives in this directory, separate from code
 - **SQLite upgrade path:** API endpoints map 1:1 to SQL queries, zero client changes needed
 
 ## Deployment
 
 - Runs on any machine with Node.js 18+
 - `./setup.sh` checks prerequisites and installs dependencies
+- `./adminTools.sh init-data ~/rigor-data` to set up data directory (required before first use)
+- `export DATA_DIR=~/rigor-data` is required for all commands except `init-data`, `package`, and `help`
 - `./adminTools.sh start` for development, `./adminTools.sh start --prod` for production
 - `./adminTools.sh stop` / `./adminTools.sh restart` for server management
-- `./adminTools.sh init-data ~/rigor-data` to set up external data directory
-- `DATA_DIR=~/rigor-data` separates persistent state from code for safe upgrades
 - Version number from `package.json`, displayed in app header
 
 ## Testing
 
 - 91 end-to-end Playwright tests covering all key flows
 - Run with `npx playwright test`
-- Tests use `data.test.json` (via `DATA_FILE` env var) — production `data.json` is never touched
+- Tests use a separate data directory (via `DATA_DIR` env var) — production data is never touched
 - `reuseExistingServer: false` in Playwright config prevents accidentally running tests against a dev server
 - Tests cover: auth, kid management, quiz CRUD (vocab, reading, SAT reading), quiz taking (all three types), split-screen layouts, SAT navigation, SAT review/submit, timed quizzes with pause/resume, analytics filtering, bold word rendering, results, export/import, auto-loading, hint system, quiz progression, retakes, cascading deletes, backend API integration

@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo } from 'react';
+import { useState, useRef, useMemo, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useAppData } from '../../hooks/useAppData';
@@ -9,6 +9,12 @@ import { shuffleArray } from '../../utils/shuffle';
 import SATQuizTakePage from './SATQuizTakePage';
 
 const CHOICE_LETTERS = ['A', 'B', 'C', 'D'];
+
+function formatTime(seconds: number): string {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+}
 
 export default function QuizTakePage() {
   const { quizId } = useParams();
@@ -25,7 +31,35 @@ export default function QuizTakePage() {
 
   const quizType = quiz ? getQuizType(quiz) : 'vocab';
   const isVocab = quizType === 'vocab';
+  const isReading = quizType === 'reading';
   const itemCount = quiz ? getQuizItemCount(quiz) : 0;
+
+  // Timer state for reading quizzes (always-on, hideable)
+  const [elapsed, setElapsed] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const [timerHidden, setTimerHidden] = useState(false);
+  const timerStartRef = useRef(Date.now());
+  const pausedDurationRef = useRef(0);
+  const pauseStartRef = useRef(0);
+
+  useEffect(() => {
+    if (!isReading || paused || submitted) return;
+    const id = setInterval(() => {
+      setElapsed(Math.floor((Date.now() - timerStartRef.current - pausedDurationRef.current) / 1000));
+    }, 250);
+    return () => clearInterval(id);
+  }, [isReading, paused, submitted]);
+
+  const togglePause = useCallback(() => {
+    setPaused(prev => {
+      if (!prev) {
+        pauseStartRef.current = Date.now();
+      } else {
+        pausedDurationRef.current += Date.now() - pauseStartRef.current;
+      }
+      return !prev;
+    });
+  }, []);
 
   // Shuffle choices once per quiz load (depend on quizId, not quiz object which
   // gets a new reference every 10s from polling)
@@ -57,6 +91,39 @@ export default function QuizTakePage() {
   if (quizType === 'satReading') {
     return <SATQuizTakePage quiz={quiz} />;
   }
+
+  // Timer display for reading quizzes
+  const timerDisplay = isReading ? (
+    timerHidden ? (
+      <div className="sat-timer-fixed">
+        <button
+          type="button"
+          className="sat-timer-btn"
+          onClick={() => setTimerHidden(false)}
+        >
+          Show Timer
+        </button>
+      </div>
+    ) : (
+      <div className="sat-timer-fixed">
+        <span className="sat-timer-time" data-testid="reading-timer">{formatTime(elapsed)}</span>
+        <button
+          type="button"
+          className="sat-timer-btn"
+          onClick={() => setTimerHidden(true)}
+        >
+          Hide
+        </button>
+        <button
+          type="button"
+          className={`sat-timer-btn ${paused ? 'sat-timer-btn--paused' : ''}`}
+          onClick={togglePause}
+        >
+          {paused ? 'Resume' : 'Pause'}
+        </button>
+      </div>
+    )
+  ) : null;
 
   const allAnswered = !isVocab
     ? (quiz.questions ?? []).every(q => answers[q.id])
@@ -108,38 +175,52 @@ export default function QuizTakePage() {
     navigate(`/quiz/take/${quiz.id}/result/${result.id}`);
   };
 
-  const renderChoiceButton = (itemId: string, choice: string, ci: number) => {
-    const selected = answers[itemId] === choice;
-    return (
-      <button
-        key={ci}
-        type="button"
-        onClick={() => setAnswers(prev => ({ ...prev, [itemId]: choice }))}
-        style={{
-          padding: '0.75rem 1rem',
-          borderRadius: 'var(--radius-sm)',
-          border: `2px solid ${selected ? 'var(--color-primary)' : 'var(--color-border)'}`,
-          backgroundColor: selected ? 'rgba(108, 99, 255, 0.08)' : 'var(--color-surface)',
-          color: selected ? 'var(--color-primary)' : 'var(--color-text)',
-          fontWeight: selected ? 700 : 500,
-          fontSize: '1.0625rem',
-          cursor: 'pointer',
-          textAlign: 'left',
-          fontFamily: 'var(--font-family)',
-          transition: 'border-color 0.15s, background-color 0.15s',
-          minHeight: 48,
-        }}
-      >
-        {choice}
-      </button>
-    );
-  };
+  const CHOICE_LETTERS_VOCAB = ['A', 'B', 'C', 'D'];
 
   // --- Reading: split-screen layout ---
   if (!isVocab) {
     const questions = quiz.questions ?? [];
+
+    // Pause overlay for reading
+    if (paused) {
+      return (
+        <div className="sat-layout">
+          {timerDisplay}
+          <div className="sat-nav-bar">
+            <div style={{ fontWeight: 700, fontSize: '1.125rem' }}>{quiz.title}</div>
+            <div className="sat-nav-counter">
+              {Object.keys(answers).length}/{questions.length} answered
+            </div>
+          </div>
+          <div className="sat-split sat-split--blurred">
+            <div className="sat-split-left">
+              <div className="sat-passage-content">
+                {quiz.passage && renderPassage(quiz.passage)}
+              </div>
+            </div>
+            <div className="sat-split-right" style={{ overflowY: 'auto' }}>
+              {questions.map((q, i) => (
+                <div key={q.id} style={{ marginBottom: '2rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', marginBottom: '0.75rem' }}>
+                    <span style={{ color: 'var(--color-text-light)', fontWeight: 600, fontSize: '0.875rem' }}>{i + 1}.</span>
+                    <span className="sat-question-text" style={{ marginBottom: 0 }}>{q.question}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="sat-bottom-nav">
+            <div />
+            <div style={{ color: 'var(--color-text-light)', fontWeight: 600 }}>Test Paused</div>
+            <div />
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className="sat-layout">
+        {timerDisplay}
         <div className="sat-nav-bar">
           <div style={{ fontWeight: 700, fontSize: '1.125rem' }}>{quiz.title}</div>
           <div className="sat-nav-counter">
@@ -226,10 +307,21 @@ export default function QuizTakePage() {
               Show word in a sentence
             </button>
           )}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
-            {(shuffledChoices[word.id] || word.choices).map((choice, ci) =>
-              renderChoiceButton(word.id, choice, ci)
-            )}
+          <div className="sat-choices">
+            {(shuffledChoices[word.id] || word.choices).map((choice, ci) => {
+              const selected = answers[word.id] === choice;
+              return (
+                <button
+                  key={ci}
+                  type="button"
+                  onClick={() => setAnswers(prev => ({ ...prev, [word.id]: choice }))}
+                  className={`sat-choice ${selected ? 'sat-choice--selected' : ''}`}
+                >
+                  <span className="sat-choice-letter">{CHOICE_LETTERS_VOCAB[ci]}</span>
+                  <span>{choice}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
         );

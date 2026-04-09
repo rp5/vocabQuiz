@@ -12,6 +12,7 @@ seq_counter
 
 # Server temp files
 .server.pid
+.server.mode
 .server.log
 
 # Test artifacts

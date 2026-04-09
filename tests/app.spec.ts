@@ -400,7 +400,7 @@ test.describe('5. Taking a Quiz', () => {
     await page.getByRole('link', { name: /Start/ }).click();
     // Answer first question
     const q1 = page.locator('.card').filter({ hasText: 'benevolent' });
-    await q1.getByRole('button', { name: 'kind' }).click();
+    await q1.locator('.sat-choice').filter({ hasText: 'kind' }).click();
     await expect(page.getByText('1/3 answered')).toBeVisible();
   });
 
@@ -409,13 +409,13 @@ test.describe('5. Taking a Quiz', () => {
 
     // Answer all correctly
     const q1 = page.locator('.card').filter({ hasText: 'benevolent' });
-    await q1.getByRole('button', { name: 'kind' }).click();
+    await q1.locator('.sat-choice').filter({ hasText: 'kind' }).click();
 
     const q2 = page.locator('.card').filter({ hasText: 'ephemeral' });
-    await q2.getByRole('button', { name: 'short-lived' }).click();
+    await q2.locator('.sat-choice').filter({ hasText: 'short-lived' }).click();
 
     const q3 = page.locator('.card').filter({ hasText: 'gregarious' });
-    await q3.getByRole('button', { name: 'sociable' }).click();
+    await q3.locator('.sat-choice').filter({ hasText: 'sociable' }).click();
 
     await page.getByRole('button', { name: /Submit Quiz/i }).click();
 
@@ -429,13 +429,13 @@ test.describe('5. Taking a Quiz', () => {
 
     // Answer 1 correct, 2 wrong
     const q1 = page.locator('.card').filter({ hasText: 'benevolent' });
-    await q1.getByRole('button', { name: 'kind' }).click();
+    await q1.locator('.sat-choice').filter({ hasText: 'kind' }).click();
 
     const q2 = page.locator('.card').filter({ hasText: 'ephemeral' });
-    await q2.getByRole('button', { name: 'permanent' }).click(); // wrong
+    await q2.locator('.sat-choice').filter({ hasText: 'permanent' }).click(); // wrong
 
     const q3 = page.locator('.card').filter({ hasText: 'gregarious' });
-    await q3.getByRole('button', { name: 'shy' }).click(); // wrong
+    await q3.locator('.sat-choice').filter({ hasText: 'shy' }).click(); // wrong
 
     await page.getByRole('button', { name: /Submit Quiz/i }).click();
 
@@ -459,11 +459,11 @@ test.describe('6. Quiz Results (Kid)', () => {
     // Take the quiz
     await page.getByRole('link', { name: /Start/ }).click();
     const q1 = page.locator('.card').filter({ hasText: 'benevolent' });
-    await q1.getByRole('button', { name: 'kind' }).click();
+    await q1.locator('.sat-choice').filter({ hasText: 'kind' }).click();
     const q2 = page.locator('.card').filter({ hasText: 'ephemeral' });
-    await q2.getByRole('button', { name: 'short-lived' }).click();
+    await q2.locator('.sat-choice').filter({ hasText: 'short-lived' }).click();
     const q3 = page.locator('.card').filter({ hasText: 'gregarious' });
-    await q3.getByRole('button', { name: 'sociable' }).click();
+    await q3.locator('.sat-choice').filter({ hasText: 'sociable' }).click();
     await page.getByRole('button', { name: /Submit Quiz/i }).click();
   });
 
@@ -507,11 +507,11 @@ test.describe('7. Kid Results History', () => {
     // Take quiz
     await page.getByRole('link', { name: /Start/ }).click();
     const q1 = page.locator('.card').filter({ hasText: 'benevolent' });
-    await q1.getByRole('button', { name: 'kind' }).click();
+    await q1.locator('.sat-choice').filter({ hasText: 'kind' }).click();
     const q2 = page.locator('.card').filter({ hasText: 'ephemeral' });
-    await q2.getByRole('button', { name: 'short-lived' }).click();
+    await q2.locator('.sat-choice').filter({ hasText: 'short-lived' }).click();
     const q3 = page.locator('.card').filter({ hasText: 'gregarious' });
-    await q3.getByRole('button', { name: 'sociable' }).click();
+    await q3.locator('.sat-choice').filter({ hasText: 'sociable' }).click();
     await page.getByRole('button', { name: /Submit Quiz/i }).click();
 
     // Check history
@@ -536,11 +536,11 @@ test.describe('8. Provider Results View', () => {
     await loginAsKid(page, 'Alice', 'alice123');
     await page.getByRole('link', { name: /Start/ }).click();
     const q1 = page.locator('.card').filter({ hasText: 'benevolent' });
-    await q1.getByRole('button', { name: 'kind' }).click();
+    await q1.locator('.sat-choice').filter({ hasText: 'kind' }).click();
     const q2 = page.locator('.card').filter({ hasText: 'ephemeral' });
-    await q2.getByRole('button', { name: 'short-lived' }).click();
+    await q2.locator('.sat-choice').filter({ hasText: 'short-lived' }).click();
     const q3 = page.locator('.card').filter({ hasText: 'gregarious' });
-    await q3.getByRole('button', { name: 'sociable' }).click();
+    await q3.locator('.sat-choice').filter({ hasText: 'sociable' }).click();
     await page.getByRole('button', { name: /Submit Quiz/i }).click();
 
     // Log back in as provider
@@ -583,11 +583,11 @@ test.describe('9. Provider Analytics', () => {
     await loginAsKid(page, 'Alice', 'alice123');
     await page.getByRole('link', { name: /Start/ }).click();
     const q1 = page.locator('.card').filter({ hasText: 'benevolent' });
-    await q1.getByRole('button', { name: 'kind' }).click();
+    await q1.locator('.sat-choice').filter({ hasText: 'kind' }).click();
     const q2 = page.locator('.card').filter({ hasText: 'ephemeral' });
-    await q2.getByRole('button', { name: 'permanent' }).click(); // wrong
+    await q2.locator('.sat-choice').filter({ hasText: 'permanent' }).click(); // wrong
     const q3 = page.locator('.card').filter({ hasText: 'gregarious' });
-    await q3.getByRole('button', { name: 'sociable' }).click();
+    await q3.locator('.sat-choice').filter({ hasText: 'sociable' }).click();
     await page.getByRole('button', { name: /Submit Quiz/i }).click();
 
     await page.getByRole('button', { name: 'Logout' }).click();
@@ -795,7 +795,7 @@ test.describe('13. Auto-load quizzes from public/quizzes/', () => {
     await expect(page.getByText('vivid colors')).toBeVisible();
 
     // Answer and submit
-    await page.getByRole('button', { name: 'bright' }).click();
+    await page.locator('.sat-choice').filter({ hasText: 'bright' }).click();
     await page.getByRole('button', { name: /Submit Quiz/ }).click();
     await expect(page.getByText('1 out of 1')).toBeVisible();
   });
@@ -841,11 +841,11 @@ test.describe('14. Quiz retake and progression', () => {
     // Take it
     await page.getByRole('link', { name: /Start/ }).click();
     const q1 = page.locator('.card').filter({ hasText: 'benevolent' });
-    await q1.getByRole('button', { name: 'kind' }).click();
+    await q1.locator('.sat-choice').filter({ hasText: 'kind' }).click();
     const q2 = page.locator('.card').filter({ hasText: 'ephemeral' });
-    await q2.getByRole('button', { name: 'short-lived' }).click();
+    await q2.locator('.sat-choice').filter({ hasText: 'short-lived' }).click();
     const q3 = page.locator('.card').filter({ hasText: 'gregarious' });
-    await q3.getByRole('button', { name: 'sociable' }).click();
+    await q3.locator('.sat-choice').filter({ hasText: 'sociable' }).click();
     await page.getByRole('button', { name: /Submit Quiz/i }).click();
     // Go back to dashboard
     await page.getByRole('link', { name: /Back to Quizzes/i }).click();
@@ -861,17 +861,17 @@ test.describe('14. Quiz retake and progression', () => {
     // Take quiz
     await page.getByRole('link', { name: /Start/ }).click();
     const q1 = page.locator('.card').filter({ hasText: 'benevolent' });
-    await q1.getByRole('button', { name: 'kind' }).click();
+    await q1.locator('.sat-choice').filter({ hasText: 'kind' }).click();
     const q2 = page.locator('.card').filter({ hasText: 'ephemeral' });
-    await q2.getByRole('button', { name: 'short-lived' }).click();
+    await q2.locator('.sat-choice').filter({ hasText: 'short-lived' }).click();
     const q3 = page.locator('.card').filter({ hasText: 'gregarious' });
-    await q3.getByRole('button', { name: 'sociable' }).click();
+    await q3.locator('.sat-choice').filter({ hasText: 'sociable' }).click();
     await page.getByRole('button', { name: /Submit Quiz/i }).click();
     // Retake
     await page.getByRole('link', { name: 'Try Again' }).click();
-    await page.locator('.card').filter({ hasText: 'benevolent' }).getByRole('button', { name: 'kind' }).click();
-    await page.locator('.card').filter({ hasText: 'ephemeral' }).getByRole('button', { name: 'permanent' }).click();
-    await page.locator('.card').filter({ hasText: 'gregarious' }).getByRole('button', { name: 'sociable' }).click();
+    await page.locator('.card').filter({ hasText: 'benevolent' }).locator('.sat-choice').filter({ hasText: 'kind' }).click();
+    await page.locator('.card').filter({ hasText: 'ephemeral' }).locator('.sat-choice').filter({ hasText: 'permanent' }).click();
+    await page.locator('.card').filter({ hasText: 'gregarious' }).locator('.sat-choice').filter({ hasText: 'sociable' }).click();
     await page.getByRole('button', { name: /Submit Quiz/i }).click();
     // Check history has two entries
     await page.getByRole('link', { name: /Back to Quizzes/i }).click();
@@ -884,18 +884,18 @@ test.describe('14. Quiz retake and progression', () => {
     // Take quiz one
     await page.getByRole('link', { name: /Start/ }).click();
     const q1a = page.locator('.card').filter({ hasText: 'benevolent' });
-    await q1a.getByRole('button', { name: 'kind' }).click();
+    await q1a.locator('.sat-choice').filter({ hasText: 'kind' }).click();
     const q2a = page.locator('.card').filter({ hasText: 'ephemeral' });
-    await q2a.getByRole('button', { name: 'short-lived' }).click();
+    await q2a.locator('.sat-choice').filter({ hasText: 'short-lived' }).click();
     const q3a = page.locator('.card').filter({ hasText: 'gregarious' });
-    await q3a.getByRole('button', { name: 'sociable' }).click();
+    await q3a.locator('.sat-choice').filter({ hasText: 'sociable' }).click();
     await page.getByRole('button', { name: /Submit Quiz/i }).click();
     await page.getByRole('link', { name: /Back to Quizzes/i }).click();
     // Take quiz two
     await page.getByRole('link', { name: /Start/ }).click();
-    await page.locator('.card').filter({ hasText: 'benevolent' }).getByRole('button', { name: 'kind' }).click();
-    await page.locator('.card').filter({ hasText: 'ephemeral' }).getByRole('button', { name: 'short-lived' }).click();
-    await page.locator('.card').filter({ hasText: 'gregarious' }).getByRole('button', { name: 'sociable' }).click();
+    await page.locator('.card').filter({ hasText: 'benevolent' }).locator('.sat-choice').filter({ hasText: 'kind' }).click();
+    await page.locator('.card').filter({ hasText: 'ephemeral' }).locator('.sat-choice').filter({ hasText: 'short-lived' }).click();
+    await page.locator('.card').filter({ hasText: 'gregarious' }).locator('.sat-choice').filter({ hasText: 'sociable' }).click();
     await page.getByRole('button', { name: /Submit Quiz/i }).click();
     await page.getByRole('link', { name: /Back to Quizzes/i }).click();
     // Should show "All caught up"
@@ -915,9 +915,9 @@ test.describe('15. Delete kid cascades', () => {
     await page.getByRole('button', { name: 'Logout' }).click();
     await loginAsKid(page, 'Alice', 'alice123');
     await page.getByRole('link', { name: /Start/ }).click();
-    await page.locator('.card').filter({ hasText: 'benevolent' }).getByRole('button', { name: 'kind' }).click();
-    await page.locator('.card').filter({ hasText: 'ephemeral' }).getByRole('button', { name: 'short-lived' }).click();
-    await page.locator('.card').filter({ hasText: 'gregarious' }).getByRole('button', { name: 'sociable' }).click();
+    await page.locator('.card').filter({ hasText: 'benevolent' }).locator('.sat-choice').filter({ hasText: 'kind' }).click();
+    await page.locator('.card').filter({ hasText: 'ephemeral' }).locator('.sat-choice').filter({ hasText: 'short-lived' }).click();
+    await page.locator('.card').filter({ hasText: 'gregarious' }).locator('.sat-choice').filter({ hasText: 'sociable' }).click();
     await page.getByRole('button', { name: /Submit Quiz/i }).click();
     // Log back as admin and delete Alice
     await page.getByRole('button', { name: 'Logout' }).click();
@@ -1246,11 +1246,11 @@ test.describe('20. Mixed Vocab and Reading Quiz Progression', () => {
     // Take the vocab quiz (click Start in the vocab card)
     await page.locator('.card').filter({ hasText: 'Vocab Quiz' }).getByRole('link', { name: /Start/ }).click();
     const q1 = page.locator('.card').filter({ hasText: 'benevolent' });
-    await q1.getByRole('button', { name: 'kind' }).click();
+    await q1.locator('.sat-choice').filter({ hasText: 'kind' }).click();
     const q2 = page.locator('.card').filter({ hasText: 'ephemeral' });
-    await q2.getByRole('button', { name: 'short-lived' }).click();
+    await q2.locator('.sat-choice').filter({ hasText: 'short-lived' }).click();
     const q3 = page.locator('.card').filter({ hasText: 'gregarious' });
-    await q3.getByRole('button', { name: 'sociable' }).click();
+    await q3.locator('.sat-choice').filter({ hasText: 'sociable' }).click();
     await page.getByRole('button', { name: /Submit Quiz/i }).click();
 
     // Go back to dashboard
@@ -1266,9 +1266,9 @@ test.describe('20. Mixed Vocab and Reading Quiz Progression', () => {
   test('kid dashboard shows reading quiz item count', async ({ page }) => {
     // Take the vocab quiz first
     await page.locator('.card').filter({ hasText: 'Vocab Quiz' }).getByRole('link', { name: /Start/ }).click();
-    await page.locator('.card').filter({ hasText: 'benevolent' }).getByRole('button', { name: 'kind' }).click();
-    await page.locator('.card').filter({ hasText: 'ephemeral' }).getByRole('button', { name: 'short-lived' }).click();
-    await page.locator('.card').filter({ hasText: 'gregarious' }).getByRole('button', { name: 'sociable' }).click();
+    await page.locator('.card').filter({ hasText: 'benevolent' }).locator('.sat-choice').filter({ hasText: 'kind' }).click();
+    await page.locator('.card').filter({ hasText: 'ephemeral' }).locator('.sat-choice').filter({ hasText: 'short-lived' }).click();
+    await page.locator('.card').filter({ hasText: 'gregarious' }).locator('.sat-choice').filter({ hasText: 'sociable' }).click();
     await page.getByRole('button', { name: /Submit Quiz/i }).click();
     await page.getByRole('link', { name: /Back to Quizzes/i }).click();
 
@@ -1585,7 +1585,7 @@ test.describe('26. Timed SAT Reading Quiz', () => {
     await expect(page.getByText(/Time:/)).toBeVisible();
   });
 
-  test('non-timed SAT quiz does not show timer', async ({ page }) => {
+  test('non-timed SAT quiz still shows timer (always-on)', async ({ page }) => {
     // Create a non-timed SAT quiz via API
     await page.evaluate(async () => {
       const res = await fetch('/api/data');
@@ -1610,8 +1610,20 @@ test.describe('26. Timed SAT Reading Quiz', () => {
     await page.reload();
     // The untimed quiz has lower seq so should appear first
     await page.getByRole('link', { name: /Start/ }).click();
-    // Timer should NOT be visible
+    // Timer should be visible (always-on)
+    await expect(page.getByTestId('sat-timer')).toBeVisible();
+  });
+
+  test('timer can be hidden and shown', async ({ page }) => {
+    await page.getByRole('link', { name: /Start/ }).click();
+    await expect(page.getByTestId('sat-timer')).toBeVisible();
+    // Hide the timer
+    await page.getByRole('button', { name: 'Hide' }).click();
     await expect(page.getByTestId('sat-timer')).toBeHidden();
+    await expect(page.getByRole('button', { name: 'Show Timer' })).toBeVisible();
+    // Show it again
+    await page.getByRole('button', { name: 'Show Timer' }).click();
+    await expect(page.getByTestId('sat-timer')).toBeVisible();
   });
 });
 
@@ -1667,11 +1679,11 @@ test.describe('28. Analytics excludes reading/SAT quiz results', () => {
     // Take vocab quiz
     await page.locator('.card').filter({ hasText: 'Vocab Quiz' }).getByRole('link', { name: /Start/ }).click();
     const q1 = page.locator('.card').filter({ hasText: 'benevolent' });
-    await q1.getByRole('button', { name: 'kind' }).click();
+    await q1.locator('.sat-choice').filter({ hasText: 'kind' }).click();
     const q2 = page.locator('.card').filter({ hasText: 'ephemeral' });
-    await q2.getByRole('button', { name: 'short-lived' }).click();
+    await q2.locator('.sat-choice').filter({ hasText: 'short-lived' }).click();
     const q3 = page.locator('.card').filter({ hasText: 'gregarious' });
-    await q3.getByRole('button', { name: 'sociable' }).click();
+    await q3.locator('.sat-choice').filter({ hasText: 'sociable' }).click();
     await page.getByRole('button', { name: /Submit Quiz/i }).click();
     await page.getByRole('link', { name: /Back to Quizzes/i }).click();
 

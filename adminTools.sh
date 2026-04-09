@@ -5,18 +5,8 @@ set -e
 
 SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 PID_FILE="$SCRIPT_DIR/.server.pid"
+MODE_FILE="$SCRIPT_DIR/.server.mode"
 LOG_FILE="$SCRIPT_DIR/.server.log"
-
-# DATA_DIR-aware paths: if DATA_DIR is set, state lives there; otherwise in project dir
-if [ -n "$DATA_DIR" ]; then
-  DATA_FILE="$DATA_DIR/data.json"
-  SEQ_FILE="$DATA_DIR/seq_counter"
-  QUIZZES_DIR="$DATA_DIR/quizzes"
-else
-  DATA_FILE="$SCRIPT_DIR/data.json"
-  SEQ_FILE="$SCRIPT_DIR/seq_counter"
-  QUIZZES_DIR="$SCRIPT_DIR/public/quizzes"
-fi
 
 # Colors
 RED='\033[0;31m'
@@ -29,6 +19,30 @@ info()  { echo -e "${CYAN}[info]${NC} $1"; }
 ok()    { echo -e "${GREEN}[ok]${NC} $1"; }
 warn()  { echo -e "${YELLOW}[warn]${NC} $1"; }
 err()   { echo -e "${RED}[error]${NC} $1" >&2; }
+
+# DATA_DIR is required for all commands except init-data, package, and help
+require_data_dir() {
+  if [ -z "$DATA_DIR" ]; then
+    err "DATA_DIR environment variable is required."
+    echo ""
+    echo "Set up a data directory first:"
+    echo "  ./adminTools.sh init-data ~/rigor-data"
+    echo "  export DATA_DIR=~/rigor-data"
+    exit 1
+  fi
+  if [ ! -d "$DATA_DIR" ]; then
+    err "DATA_DIR does not exist or is not a directory: $DATA_DIR"
+    echo "  Create it with: ./adminTools.sh init-data $DATA_DIR"
+    exit 1
+  fi
+}
+
+# Set paths from DATA_DIR (only valid after require_data_dir)
+setup_paths() {
+  DATA_FILE="$DATA_DIR/data.json"
+  SEQ_FILE="$DATA_DIR/seq_counter"
+  QUIZZES_DIR="$DATA_DIR/quizzes"
+}
 
 # --- Process management helpers ---
 
@@ -66,14 +80,19 @@ do_start() {
     info "Building for production..."
     npm run build --silent
     info "Starting production server..."
-    DATA_DIR="${DATA_DIR:-}" NODE_ENV=production nohup node server.cjs > "$LOG_FILE" 2>&1 &
+    NODE_ENV=production nohup node server.cjs > "$LOG_FILE" 2>&1 &
   else
     info "Starting development server..."
-    DATA_DIR="${DATA_DIR:-}" nohup npm run dev:host > "$LOG_FILE" 2>&1 &
+    nohup npm run dev:host > "$LOG_FILE" 2>&1 &
   fi
 
   local pid=$!
   echo "$pid" > "$PID_FILE"
+  if $prod; then
+    echo "prod" > "$MODE_FILE"
+  else
+    echo "dev" > "$MODE_FILE"
+  fi
 
   # Wait briefly to check it didn't die immediately
   sleep 1
@@ -93,9 +112,7 @@ do_start() {
       info "  Network: http://$lan_ip:$port"
       info "  Kids:    http://$lan_ip:$port/quiz/login"
     fi
-    if [ -n "$DATA_DIR" ]; then
-      info "  Data:    $DATA_DIR"
-    fi
+    info "  Data:    $DATA_DIR"
   else
     rm -f "$PID_FILE"
     err "Server failed to start. Check $LOG_FILE"
@@ -129,12 +146,31 @@ do_stop() {
   fi
 
   rm -f "$PID_FILE"
+  rm -f "$MODE_FILE"
   ok "Server stopped"
 }
 
+get_running_mode() {
+  if [ -f "$MODE_FILE" ]; then
+    cat "$MODE_FILE"
+  else
+    echo "dev"
+  fi
+}
+
 do_restart() {
+  # If no explicit mode flag given, preserve the mode of the running server
+  local mode_arg="$1"
+  if [ -z "$mode_arg" ]; then
+    local prev_mode
+    prev_mode=$(get_running_mode)
+    if [ "$prev_mode" = "prod" ]; then
+      mode_arg="--prod"
+      info "Detected production mode, restarting in production mode"
+    fi
+  fi
   do_stop
-  do_start "$@"
+  do_start "$mode_arg"
 }
 
 do_status() {
@@ -143,11 +179,7 @@ do_status() {
   else
     info "Server is not running"
   fi
-  if [ -n "$DATA_DIR" ]; then
-    info "DATA_DIR: $DATA_DIR"
-  else
-    info "DATA_DIR: not set (using project directory)"
-  fi
+  info "DATA_DIR: $DATA_DIR"
 }
 
 # --- Reset password ---
@@ -409,16 +441,6 @@ do_upgrade() {
     return 1
   fi
 
-  # Require DATA_DIR for production upgrades
-  if [ -z "$DATA_DIR" ]; then
-    err "DATA_DIR is not set. Upgrade requires an external data directory to protect production state."
-    echo ""
-    echo "Set it up first:"
-    echo "  ./adminTools.sh init-data ~/rigor-data"
-    echo "  export DATA_DIR=~/rigor-data"
-    return 1
-  fi
-
   if [ ! -f "$tarball" ]; then
     err "File not found: $tarball"
     return 1
@@ -503,29 +525,31 @@ usage() {
   echo "  upgrade <tarball.tar.gz>          Upgrade code from tarball (requires DATA_DIR)"
   echo ""
   echo "Environment:"
-  echo "  DATA_DIR    External data directory (data.json, quizzes, seq_counter)."
-  echo "              When set, all state reads/writes go to this directory."
-  echo "              When not set, uses project directory (dev mode)."
+  echo "  DATA_DIR    (Required) Data directory containing data.json, quizzes/, seq_counter."
+  echo "              All state reads/writes go to this directory."
+  echo "              Set up with: ./adminTools.sh init-data <directory>"
   echo ""
   echo "Examples:"
+  echo "  ./adminTools.sh init-data ~/rigor-data      # Set up data directory"
+  echo "  export DATA_DIR=~/rigor-data"
   echo "  ./adminTools.sh start                       # Start dev server"
   echo "  ./adminTools.sh start --prod                # Build and start production"
   echo "  ./adminTools.sh publish week13.json Shrey   # Publish quiz"
-  echo "  ./adminTools.sh init-data ~/rigor-data      # Set up production data dir"
-  echo "  DATA_DIR=~/rigor-data ./adminTools.sh start --prod"
 }
 
 case "${1:-}" in
-  start)          do_start "$2" ;;
-  stop)           do_stop ;;
-  restart)        do_restart "$2" ;;
-  status)         do_status ;;
-  reset-password) do_reset_password ;;
-  publish)        do_publish "$2" "$3" ;;
+  # Commands that don't require DATA_DIR
   init-data)      do_init_data "$2" ;;
   package)        do_package ;;
-  upgrade)        do_upgrade "$2" ;;
   help|--help|-h) usage ;;
+  # Commands that require DATA_DIR
+  start)          require_data_dir; setup_paths; do_start "$2" ;;
+  stop)           do_stop ;;
+  restart)        require_data_dir; setup_paths; do_restart "$2" ;;
+  status)         require_data_dir; setup_paths; do_status ;;
+  reset-password) require_data_dir; setup_paths; do_reset_password ;;
+  publish)        require_data_dir; setup_paths; do_publish "$2" "$3" ;;
+  upgrade)        require_data_dir; setup_paths; do_upgrade "$2" ;;
   *)
     if [ -n "$1" ]; then
       err "Unknown command: $1"
