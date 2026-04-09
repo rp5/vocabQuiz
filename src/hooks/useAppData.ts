@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import type { AppData, Kid, Quiz, QuizResult } from '../types';
-import { getCachedData, updateCachedData, loadAppData, apiPost, apiPatch, apiDelete } from '../utils/storage';
+import { getCachedData, updateCachedData, loadAppData, apiPost, apiPatch, apiDelete, hasPendingSaves } from '../utils/storage';
 import { generateId } from '../utils/ids';
 import { hashPassword } from '../utils/crypto';
 
@@ -34,9 +34,11 @@ export function useAppData() {
     });
   }, [setData]);
 
-  // Poll for updates every 10 seconds
+  // Poll for updates every 10 seconds (skip while saves are in-flight to avoid
+  // overwriting optimistic updates with stale server data)
   useEffect(() => {
     const interval = setInterval(async () => {
+      if (hasPendingSaves()) return;
       try {
         const fresh = await loadAppData();
         setData(fresh);

@@ -757,7 +757,7 @@ test.describe('12. Provider Re-login', () => {
   });
 });
 
-test.describe('13. Auto-load quizzes from public/quizzes/', () => {
+test.describe('13. Auto-load quizzes from DATA_DIR/quizzes/', () => {
   test('alwaysShowSentence=false hides sentence behind hint button', async ({ page }) => {
     await page.goto('/');
     await clearStorage(page);
@@ -800,7 +800,7 @@ test.describe('13. Auto-load quizzes from public/quizzes/', () => {
     await expect(page.getByText('1 out of 1')).toBeVisible();
   });
 
-  test('quizzes from public/quizzes/ are loaded and kid can see them', async ({ page }) => {
+  test('quizzes from DATA_DIR/quizzes/ are loaded and kid can see them', async ({ page }) => {
     await page.goto('/');
     await clearStorage(page);
     await setupProvider(page);

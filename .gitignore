@@ -8,6 +8,7 @@ dist/
 # Data files (persistent state — never commit)
 data.json
 data.test.json
+test-data/data.json
 seq_counter
 
 # Server temp files
