@@ -55,6 +55,7 @@ is_running() {
     fi
     # Stale PID file
     rm -f "$PID_FILE"
+    rm -f "$MODE_FILE"
   fi
   return 1
 }
@@ -200,11 +201,11 @@ do_reset_password() {
     return 1
   fi
 
-  node -e "
+  DATA_JSON="$DATA_FILE" node -e "
     const fs = require('fs');
-    const data = JSON.parse(fs.readFileSync('$DATA_FILE', 'utf-8'));
+    const data = JSON.parse(fs.readFileSync(process.env.DATA_JSON, 'utf-8'));
     data.providerPasswordHash = '';
-    fs.writeFileSync('$DATA_FILE', JSON.stringify(data, null, 2));
+    fs.writeFileSync(process.env.DATA_JSON, JSON.stringify(data, null, 2));
   "
 
   ok "Admin password cleared. Next login will prompt to set a new password."
@@ -228,15 +229,15 @@ do_publish() {
   fi
 
   # Validate JSON
-  if ! node -e "JSON.parse(require('fs').readFileSync('$file', 'utf-8'))" 2>/dev/null; then
+  if ! QUIZ_FILE="$file" node -e "JSON.parse(require('fs').readFileSync(process.env.QUIZ_FILE, 'utf-8'))" 2>/dev/null; then
     err "Invalid JSON: $file"
     return 1
   fi
 
   # Infer quiz type
   local quiz_type
-  quiz_type=$(node -e "
-    const q = JSON.parse(require('fs').readFileSync('$file', 'utf-8'));
+  quiz_type=$(QUIZ_FILE="$file" node -e "
+    const q = JSON.parse(require('fs').readFileSync(process.env.QUIZ_FILE, 'utf-8'));
     if (q.satQuestions) console.log('satReading');
     else if (q.passage || q.questions) console.log('reading');
     else console.log('vocab');
@@ -269,15 +270,15 @@ do_publish() {
   mkdir -p "$dest_dir"
 
   # Write modified quiz to destination
-  node -e "
+  QUIZ_FILE="$file" QUIZ_SEQ="$seq_id" QUIZ_STUDENT="$student" QUIZ_TYPE="$quiz_type" QUIZ_DEST="$dest_dir/$basename" node -e "
     const fs = require('fs');
-    const quiz = JSON.parse(fs.readFileSync('$file', 'utf-8'));
-    quiz.seq = $seq_id;
-    quiz.assignTo = '$student';
-    if (!quiz.type && '$quiz_type' !== 'vocab') {
-      quiz.type = '$quiz_type';
+    const quiz = JSON.parse(fs.readFileSync(process.env.QUIZ_FILE, 'utf-8'));
+    quiz.seq = Number(process.env.QUIZ_SEQ);
+    quiz.assignTo = process.env.QUIZ_STUDENT;
+    if (!quiz.type && process.env.QUIZ_TYPE !== 'vocab') {
+      quiz.type = process.env.QUIZ_TYPE;
     }
-    fs.writeFileSync('$dest_dir/$basename', JSON.stringify(quiz, null, 2));
+    fs.writeFileSync(process.env.QUIZ_DEST, JSON.stringify(quiz, null, 2));
   "
   ok "Copied $basename to $subdir/ (seq=$seq_id, assignTo=$student)"
 
@@ -364,8 +365,8 @@ do_init_data() {
     [ "$bname" = "index.json" ] && continue
     # Detect type and copy to correct subdir
     local qtype
-    qtype=$(node -e "
-      const q = JSON.parse(require('fs').readFileSync('$f', 'utf-8'));
+    qtype=$(QUIZ_FILE="$f" node -e "
+      const q = JSON.parse(require('fs').readFileSync(process.env.QUIZ_FILE, 'utf-8'));
       if (q.satQuestions) console.log('sat-reading');
       else if (q.passage || q.questions) console.log('reading');
       else console.log('vocab');

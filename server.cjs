@@ -375,6 +375,14 @@ app.patch('/api/provider-password', async (req, res) => {
   res.json({ ok: true });
 });
 
+// --- Error handler ---
+app.use((err, req, res, _next) => {
+  console.error('[Server] Unhandled error:', err);
+  if (!res.headersSent) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // --- Static files (production) ---
 if (process.env.NODE_ENV === 'production') {
   const distDir = path.join(__dirname, 'dist');
