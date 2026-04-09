@@ -12,6 +12,7 @@ const DEFAULT_DATA: AppData = {
 // In-memory cache for synchronous access (useState initializer)
 let cachedData: AppData = { ...DEFAULT_DATA };
 let initialLoadDone = false;
+let pendingSaves = 0;
 
 export function getCachedData(): AppData {
   return cachedData;
@@ -23,6 +24,10 @@ export function updateCachedData(updater: (prev: AppData) => AppData): void {
 
 export function isInitialLoadDone(): boolean {
   return initialLoadDone;
+}
+
+export function hasPendingSaves(): boolean {
+  return pendingSaves > 0;
 }
 
 export async function loadAppData(): Promise<AppData> {
@@ -37,27 +42,42 @@ export async function loadAppData(): Promise<AppData> {
   }
 }
 
+async function trackSave<T>(fn: () => Promise<T>): Promise<T> {
+  pendingSaves++;
+  try {
+    return await fn();
+  } finally {
+    pendingSaves--;
+  }
+}
+
 export async function apiPost(endpoint: string, body: unknown): Promise<unknown> {
-  const res = await fetch(`${API_BASE}${endpoint}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
+  return trackSave(async () => {
+    const res = await fetch(`${API_BASE}${endpoint}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return res.json();
   });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  return res.json();
 }
 
 export async function apiPatch(endpoint: string, body: unknown): Promise<unknown> {
-  const res = await fetch(`${API_BASE}${endpoint}`, {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
+  return trackSave(async () => {
+    const res = await fetch(`${API_BASE}${endpoint}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return res.json();
   });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  return res.json();
 }
 
 export async function apiDelete(endpoint: string): Promise<void> {
-  const res = await fetch(`${API_BASE}${endpoint}`, { method: 'DELETE' });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return trackSave(async () => {
+    const res = await fetch(`${API_BASE}${endpoint}`, { method: 'DELETE' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  });
 }

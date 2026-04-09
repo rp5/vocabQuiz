@@ -1,0 +1,13 @@
+{
+  "title": "Positive Traits",
+  "seq": 1,
+  "assignTo": "shrey",
+  "words": [
+    {
+      "word": "benevolent",
+      "sentence": "The benevolent king helped the poor.",
+      "choices": ["kind", "cruel", "lazy", "angry"],
+      "answer": "kind"
+    }
+  ]
+}

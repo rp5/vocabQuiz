@@ -182,15 +182,27 @@ function loadQuizzesFromFolder() {
       entries.push(...rootFiles);
     }
 
-    if (entries.length === 0) return;
-
     const quizzes = entries.map((e, i) =>
       normalizeQuiz(e.quiz, (i + 1) * 100 + e.seqHint)
     );
 
     const data = readData();
     const resolved = resolveKidNames(quizzes, data);
-    const existingMap = new Map(data.quizzes.map(q => [q.id, q]));
+    const folderIds = new Set(resolved.map(q => q.id));
+
+    // Remove folder-sourced quizzes that no longer have files (quiz_seq_* IDs)
+    // Keep UI-created quizzes (quiz_<timestamp>_* IDs) untouched
+    const kept = data.quizzes.filter(q => {
+      if (q.id.startsWith('quiz_seq_')) {
+        if (!folderIds.has(q.id)) {
+          console.log(`[QuizLoader] Removed deleted quiz: ${q.id} (${q.title})`);
+          return false;
+        }
+      }
+      return true;
+    });
+
+    const existingMap = new Map(kept.map(q => [q.id, q]));
     for (const q of resolved) {
       existingMap.set(q.id, q);
     }
@@ -201,7 +213,7 @@ function loadQuizzesFromFolder() {
     }
     data.quizzes = Array.from(existingMap.values());
     writeData(data);
-    console.log(`[QuizLoader] Loaded ${quizzes.length} quizzes total`);
+    console.log(`[QuizLoader] Synced ${quizzes.length} folder quizzes, ${data.quizzes.length} total`);
   } catch (err) {
     console.error('[QuizLoader] Error:', err.message);
   }
