@@ -1,8 +1,26 @@
 import { useState, useCallback, useEffect } from 'react';
 import type { AppData, Kid, Quiz, QuizResult } from '../types';
-import { getCachedData, updateCachedData, loadAppData, apiPost, apiPatch, apiDelete, hasPendingSaves } from '../utils/storage';
+import { getCachedData, updateCachedData, loadAppData, apiPost, apiPostWithRetry, apiPatch, apiDelete, hasPendingSaves, mergePendingResults } from '../utils/storage';
+import { enqueueResult, dequeueResult, getPendingResults } from '../utils/resultQueue';
+import { debugLog } from '../utils/debugLog';
 import { generateId } from '../utils/ids';
 import { hashPassword } from '../utils/crypto';
+
+function recoverPendingResults() {
+  const pending = getPendingResults();
+  if (pending.length === 0) return;
+  debugLog(`Recovery: found ${pending.length} pending result(s) in localStorage`);
+  for (const result of pending) {
+    apiPostWithRetry('/results', result)
+      .then(() => {
+        debugLog(`Recovery: ${result.id} confirmed by server`);
+        dequeueResult(result.id);
+      })
+      .catch(err => {
+        debugLog(`Recovery: ${result.id} still failing: ${err}`, 'error');
+      });
+  }
+}
 
 export function useAppData() {
   const [data, setDataRaw] = useState<AppData>(getCachedData);
@@ -24,11 +42,13 @@ export function useAppData() {
     const hasData = cached.kids.length > 0 || cached.quizzes.length > 0 || cached.results.length > 0 || cached.providerPasswordHash !== '';
     if (hasData) {
       setLoading(false);
+      recoverPendingResults();
       return;
     }
     loadAppData().then(d => {
-      setData(d);
+      setData(mergePendingResults(d));
       setLoading(false);
+      recoverPendingResults();
     }).catch(() => {
       setLoading(false);
     });
@@ -41,7 +61,7 @@ export function useAppData() {
       if (hasPendingSaves()) return;
       try {
         const fresh = await loadAppData();
-        setData(fresh);
+        setData(mergePendingResults(fresh));
       } catch { /* silent */ }
     }, 10_000);
     return () => clearInterval(interval);
@@ -153,8 +173,20 @@ export function useAppData() {
       ...result,
       id: generateId('result'),
     };
+    debugLog(`saveResult: ${newResult.id} for "${newResult.quizTitle}"`);
+    // Persist to localStorage BEFORE anything else (survives browser close)
+    enqueueResult(newResult);
+    // Optimistic update to React state
     setData(d => ({ ...d, results: [...d.results, newResult] }));
-    apiPost('/results', newResult).catch(console.error);
+    // POST with retry; dequeue on success, keep in localStorage on failure
+    apiPostWithRetry('/results', newResult)
+      .then(() => {
+        debugLog(`saveResult: ${newResult.id} confirmed by server`);
+        dequeueResult(newResult.id);
+      })
+      .catch(err => {
+        debugLog(`saveResult: ${newResult.id} FAILED after retries: ${err}`, 'error');
+      });
     return newResult;
   }, []);
 

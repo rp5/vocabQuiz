@@ -54,6 +54,7 @@ function readData() {
 }
 
 function writeData(data) {
+  console.log(`[Server] writeData: ${data.results.length} results, ${data.kids.length} kids, ${data.quizzes.length} quizzes`);
   const tmp = DATA_FILE + '.tmp';
   fs.writeFileSync(tmp, JSON.stringify(data, null, 2));
   fs.renameSync(tmp, DATA_FILE);
@@ -219,6 +220,17 @@ function loadQuizzesFromFolder() {
   }
 }
 
+// --- Request logging ---
+app.use((req, res, next) => {
+  const start = Date.now();
+  res.on('finish', () => {
+    // Skip noisy GET /api/data polling
+    if (req.method === 'GET' && req.path === '/api/data') return;
+    console.log(`[Server] ${req.method} ${req.path} ${res.statusCode} ${Date.now() - start}ms`);
+  });
+  next();
+});
+
 // --- API Endpoints ---
 
 // Reset (for tests)
@@ -358,7 +370,14 @@ app.post('/api/results', async (req, res) => {
   const result = await mutex.lock(() => {
     const data = readData();
     const newResult = { ...req.body, id: req.body.id || generateId('result') };
+    // Idempotency: skip duplicate (safe for client retries)
+    const existing = data.results.find(r => r.id === newResult.id);
+    if (existing) {
+      console.log(`[Server] POST /api/results: duplicate ${newResult.id}, returning existing`);
+      return existing;
+    }
     data.results.push(newResult);
+    console.log(`[Server] POST /api/results: saved ${newResult.id} (kid: ${newResult.kidName}, quiz: ${newResult.quizTitle})`);
     writeData(data);
     return newResult;
   });

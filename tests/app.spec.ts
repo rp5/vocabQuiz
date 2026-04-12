@@ -5,6 +5,7 @@ import { test, expect, type Page } from '@playwright/test';
 async function clearStorage(page: Page) {
   await page.evaluate(async () => {
     sessionStorage.clear();
+    localStorage.clear();
     await fetch('/api/reset', { method: 'POST' });
   });
   await page.reload();
