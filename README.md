@@ -189,10 +189,10 @@ Kids see **one quiz at a time** (the next untaken quiz, ordered by `seq`):
    - **Vocab:** word + context sentence + 4 shuffled A/B/C/D bubble choices
    - **Reading:** split-screen (passage pinned on left, all questions scrollable on right with A/B/C/D bubble choices), always-on timer with hide/pause
    - **SAT Reading:** Bluebook-style split-screen (passage left, question + A/B/C/D bubble choices right), one question at a time, numbered navigation bar + prev/next arrows, review screen before submit, always-on timer with hide/pause
-4. Submits and sees score + per-question review immediately
-5. Quiz moves to a collapsible "Previously Taken" section
+4. Submits and sees score + a quiz-style per-question review immediately (passage + question + 4 choices in original order, correct one highlighted green, wrong picks red)
+5. Quiz moves to a collapsible "Previously Taken" section, sorted most-recent first
 6. Next untaken quiz appears, or "All caught up!" message
-7. Kids can retake any previously taken quiz from the collapsed section
+7. Kids can retake any previously taken quiz from the collapsed section, or hit Review to see the same quiz-style breakdown again (falls back to a compact summary if the original quiz has since been deleted)
 
 ## Admin Tools
 
