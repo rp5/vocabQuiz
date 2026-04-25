@@ -12,12 +12,11 @@ export default function KidDashboard() {
   const quizzes = getQuizzesForKid(auth.kidId!);
   const results = getResultsForKid(auth.kidId!);
 
-  // Sort by seq number
+  // Sort by seq number for the "next untaken" picker
   const sorted = [...quizzes].sort((a, b) => (a.seq ?? 0) - (b.seq ?? 0));
 
   // Split into taken and untaken
   const takenQuizIds = new Set(results.map(r => r.quizId));
-  const taken = sorted.filter(q => takenQuizIds.has(q.id));
   const untaken = sorted.filter(q => !takenQuizIds.has(q.id));
 
   // Next untaken quiz per type
@@ -30,6 +29,17 @@ export default function KidDashboard() {
     if (attempts.length === 0) return null;
     return attempts.sort((a, b) => new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime())[0];
   };
+
+  // Previously taken: most recently attempted first
+  const taken = sorted
+    .filter(q => takenQuizIds.has(q.id))
+    .sort((a, b) => {
+      const ra = getLatestResult(a.id);
+      const rb = getLatestResult(b.id);
+      const ta = ra ? new Date(ra.completedAt).getTime() : 0;
+      const tb = rb ? new Date(rb.completedAt).getTime() : 0;
+      return tb - ta;
+    });
 
   return (
     <div>

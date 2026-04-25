@@ -441,9 +441,11 @@ test.describe('5. Taking a Quiz', () => {
     await page.getByRole('button', { name: /Submit Quiz/i }).click();
 
     await expect(page.getByText('1 out of 3')).toBeVisible({ timeout: 10000 });
-    // Should show wrong answers
-    await expect(page.getByText('Your answer: permanent')).toBeVisible();
-    await expect(page.getByText('Correct: short-lived')).toBeVisible();
+    // Review: the wrong "ephemeral" card should mark "permanent" as the kid's pick
+    // (red) and "short-lived" as the correct answer (green).
+    const ephemeralCard = page.locator('.card').filter({ hasText: 'ephemeral' });
+    await expect(ephemeralCard.locator('.sat-choice--wrong').filter({ hasText: 'permanent' })).toBeVisible();
+    await expect(ephemeralCard.locator('.sat-choice--correct').filter({ hasText: 'short-lived' })).toBeVisible();
   });
 });
 
@@ -881,6 +883,31 @@ test.describe('14. Quiz retake and progression', () => {
     await expect(resultCards).toHaveCount(2);
   });
 
+  test('Previously Taken lists most recently taken quiz first', async ({ page }) => {
+    // Take Quiz One (lower seq) first
+    await page.locator('.card').filter({ hasText: 'Quiz One' }).getByRole('link', { name: /Start/ }).click();
+    await page.locator('.card').filter({ hasText: 'benevolent' }).locator('.sat-choice').filter({ hasText: 'kind' }).click();
+    await page.locator('.card').filter({ hasText: 'ephemeral' }).locator('.sat-choice').filter({ hasText: 'short-lived' }).click();
+    await page.locator('.card').filter({ hasText: 'gregarious' }).locator('.sat-choice').filter({ hasText: 'sociable' }).click();
+    await page.getByRole('button', { name: /Submit Quiz/i }).click();
+    await page.getByRole('link', { name: /Back to Quizzes/i }).click();
+
+    // Then take Quiz Two
+    await page.locator('.card').filter({ hasText: 'Quiz Two' }).getByRole('link', { name: /Start/ }).click();
+    await page.locator('.card').filter({ hasText: 'benevolent' }).locator('.sat-choice').filter({ hasText: 'kind' }).click();
+    await page.locator('.card').filter({ hasText: 'ephemeral' }).locator('.sat-choice').filter({ hasText: 'short-lived' }).click();
+    await page.locator('.card').filter({ hasText: 'gregarious' }).locator('.sat-choice').filter({ hasText: 'sociable' }).click();
+    await page.getByRole('button', { name: /Submit Quiz/i }).click();
+    await page.getByRole('link', { name: /Back to Quizzes/i }).click();
+
+    // Expand Previously Taken and verify Quiz Two (just taken) is listed before Quiz One
+    await page.getByText(/Previously Taken/).click();
+    const cards = page.locator('.card').filter({ hasText: /^Quiz (One|Two)/ });
+    await expect(cards).toHaveCount(2);
+    expect(await cards.nth(0).textContent()).toContain('Quiz Two');
+    expect(await cards.nth(1).textContent()).toContain('Quiz One');
+  });
+
   test('all quizzes done shows "All caught up" message', async ({ page }) => {
     // Take quiz one
     await page.getByRole('link', { name: /Start/ }).click();
@@ -1179,8 +1206,9 @@ test.describe('18. Taking a Reading Quiz', () => {
 
     await page.getByRole('button', { name: /Submit Quiz/i }).click();
     await expect(page.getByText('1 out of 3')).toBeVisible({ timeout: 10000 });
-    await expect(page.getByText('Your answer: Wind')).toBeVisible();
-    await expect(page.getByText("Correct: The sun's heat")).toBeVisible();
+    // Review marks the kid's wrong pick red and the correct choice green
+    await expect(page.locator('.sat-choice--wrong').filter({ hasText: 'Wind' })).toBeVisible();
+    await expect(page.locator('.sat-choice--correct').filter({ hasText: "The sun's heat" })).toBeVisible();
   });
 });
 

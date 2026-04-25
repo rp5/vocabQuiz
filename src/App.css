@@ -525,6 +525,30 @@ th {
   color: white;
 }
 
+/* Review states (used on QuizResultPage to show kid's pick vs. correct) */
+.sat-choice--correct {
+  border-color: var(--color-success);
+  background: var(--color-success-light);
+  color: var(--color-success);
+  font-weight: 600;
+}
+.sat-choice--correct .sat-choice-letter {
+  background: var(--color-success);
+  border-color: var(--color-success);
+  color: white;
+}
+.sat-choice--wrong {
+  border-color: var(--color-error);
+  background: var(--color-error-light);
+  color: var(--color-error);
+  font-weight: 600;
+}
+.sat-choice--wrong .sat-choice-letter {
+  background: var(--color-error);
+  border-color: var(--color-error);
+  color: white;
+}
+
 .sat-bottom-nav {
   display: flex;
   align-items: center;

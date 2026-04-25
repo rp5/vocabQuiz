@@ -91,7 +91,8 @@ Rigor is a quiz web app for kids supporting three quiz types: **vocabulary**, **
 
 - **Two-card layout** — separate cards for Vocabulary and Reading (Reading groups both reading comprehension and SAT reading quizzes)
 - **Next quiz per type** — each card shows the next untaken quiz with a "Start Quiz" button
-- **Previously Taken** — collapsible section showing taken quizzes with latest score, Review and Retake buttons
+- **Previously Taken** — collapsible section showing taken quizzes with latest score, Review and Retake buttons; sorted most-recent-first (latest attempt at the top, retakes bump a quiz back up)
+- **Review screen mirrors the quiz** — Review opens the result laid out like the original quiz: passage (shared for reading, per-question for SAT) + question + all four choices in their original order, with the correct choice highlighted green and a wrong pick highlighted red. Falls back to a compact summary if the underlying quiz has been deleted.
 - **All caught up** — encouraging message when no quizzes are pending
 - **Retakes** — kids can retake any previously completed quiz; each attempt saved separately
 
